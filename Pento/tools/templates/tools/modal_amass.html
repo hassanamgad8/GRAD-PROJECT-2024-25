@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amass Scan</title>
+</head>
+<body>
+    <h2>Amass Scan</h2>
+    <form method="POST" action="/amass/">
+        {% csrf_token %}
+        <label for="domain">Domain:</label>
+        <input type="text" name="domain" required>
+        <button type="submit">Scan</button>
+    </form>
+</body>
+</html>

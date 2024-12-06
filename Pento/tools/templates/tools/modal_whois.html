@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Whois Lookup</title>
+</head>
+<body>
+    <h2>Whois Lookup</h2>
+    <form method="POST" action="/whois/">
+        {% csrf_token %}
+        <label for="domain">Domain:</label>
+        <input type="text" name="domain" required>
+        <button type="submit">Lookup</button>
+    </form>
+</body>
+</html>

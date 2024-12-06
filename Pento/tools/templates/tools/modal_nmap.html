@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nmap Scan</title>
+</head>
+<body>
+    <h2>Nmap Scan</h2>
+    <form method="POST" action="/nmap/">
+        {% csrf_token %}
+        <label for="target">Target:</label>
+        <input type="text" name="target" required>
+        <button type="submit">Scan</button>
+    </form>
+</body>
+</html>

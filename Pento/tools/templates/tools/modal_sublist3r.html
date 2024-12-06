@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sublist3r Scan</title>
+</head>
+<body>
+    <h2>Sublist3r Scan</h2>
+    <form method="POST" action="/sublist3r/">
+        {% csrf_token %}
+        <label for="domain">Domain:</label>
+        <input type="text" name="domain" required>
+        <button type="submit">Scan</button>
+    </form>
+</body>
+</html>
