@@ -5,11 +5,10 @@
 </head>
 <body>
     <h2>Whois Lookup</h2>
-    <form method="POST" action="/whois/">
+    <form method="POST" action="{% url 'whois_scan' %}">
         {% csrf_token %}
-        <label for="domain">Domain:</label>
-        <input type="text" name="domain" required>
-        <button type="submit">Lookup</button>
+        <input type="text" name="domain" placeholder="Enter domain">
+        <button type="submit">Get Whois Info</button>
     </form>
 </body>
 </html>

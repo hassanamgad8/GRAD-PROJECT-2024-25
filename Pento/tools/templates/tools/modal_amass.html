@@ -4,12 +4,20 @@
     <title>Amass Scan</title>
 </head>
 <body>
+    {% load static %}
+    <header>
+        <img src="{% static 'images/amass.png' %}" alt="Amass Logo" style="width: 80px; display: block; margin: 10px auto;">
+    </header>
     <h2>Amass Scan</h2>
-    <form method="POST" action="/amass/">
+    <form method="POST" action="{% url 'amass_scan' %}">
         {% csrf_token %}
-        <label for="domain">Domain:</label>
-        <input type="text" name="domain" required>
-        <button type="submit">Scan</button>
+        <label for="domain">Enter Domain:</label>
+        <input type="text" id="domain" name="domain">
+        <button type="submit">Run Amass Scan</button>
     </form>
+    {% if amass_results %}
+    <h3>Amass Results:</h3>
+    <pre>{{ amass_results }}</pre>
+    {% endif %}
 </body>
 </html>

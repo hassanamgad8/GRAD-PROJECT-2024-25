@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pentesting Tools</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>Pentesting Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 </head>
-<body>
-    <h1>Penetration Testing Dashboard</h1>
-    <div>
-        <a href="/nmap/">Nmap</a>
-        <a href="/whois/">Whois</a>
-        <a href="/sublist3r/">Sublist3r</a>
-        <a href="/amass/">Amass</a>
-        <a href="/zap/">OWASP ZAP</a>
-    </div>
-    <script src="{% static 'js/scripts.js' %}"></script>
+<body style="background: url("{% static 'images/dark_theme_background.jpeg' %}") no-repeat center center fixed; background-size: cover;
+
+
+    <header>
+        <img src="{% static 'images/hacker_logo.png' %}" alt="Hacker Logo" style="width: 100px; display: block; margin: 20px auto;">
+    </header>
+    <h1>Welcome to  Pento Dashboard</h1>
+    <p>Select a tool to get started:</p>
+    <ul style="text-align: center;">
+        <li>
+            <a href="/nmap/">
+                <img src="{% static 'images/nmap.png' %}" alt="Nmap" style="width: 50px; vertical-align: middle;">
+                Nmap
+            </a>
+        </li>
+        <li>
+            <a href="/whois/">
+                <img src="{% static 'images/whois.png' %}" alt="Whois" style="width: 50px; vertical-align: middle;">
+                Whois
+            </a>
+        </li>
+        <li>
+            <a href="/sublist3r/">
+                <img src="{% static 'images/sublist3r.png' %}" alt="Sublist3r" style="width: 50px; vertical-align: middle;">
+                Sublist3r
+            </a>
+        </li>
+        <li>
+            <a href="/amass/">
+                <img src="{% static 'images/amass.png' %}" alt="Amass" style="width: 50px; vertical-align: middle;">
+                Amass
+            </a>
+        </li>
+        <li>
+            <a href="/zap/">
+                <img src="{% static 'images/zap.png' %}" alt="OWASP ZAP" style="width: 50px; vertical-align: middle;">
+                OWASP ZAP
+            </a>
+        </li>
+    </ul>
+
+    <script src="/static/js/script.js"></script>
 </body>
 </html>
