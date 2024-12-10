@@ -28,10 +28,3 @@ class AmassScan(models.Model):
     
 
 
-class ToolLog(models.Model):
-    tool_name = models.CharField(max_length=100)
-    scan_date = models.DateTimeField(auto_now_add=True)
-    result = models.TextField()
-
-    def __str__(self):
-        return f"{self.tool_name} - {self.scan_date}"

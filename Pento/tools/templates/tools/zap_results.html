@@ -1,0 +1,17 @@
+<h2>Scan Results for {{ target_url }}</h2>
+<table border="1">
+    <tr>
+        <th>URL</th>
+        <th>Description</th>
+        <th>Risk Level</th>
+        <th>OWASP Top 10 Category</th>
+    </tr>
+    {% for result in results %}
+    <tr>
+        <td>{{ result.url }}</td>
+        <td>{{ result.description }}</td>
+        <td>{{ result.risk }}</td>
+        <td>{{ result.vulnerability_type }}</td>
+    </tr>
+    {% endfor %}
+</table>

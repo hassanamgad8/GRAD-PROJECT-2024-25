@@ -9,6 +9,8 @@ import whois
 import sublist3r
 import re
 import logging
+from zapv2 import ZAPv2
+import time
 
 
 
@@ -195,7 +197,55 @@ def is_valid_domain(domain):
     return domain_regex.match(domain) is not None
 
 
-def zap_scan(request):
-    # Your function code here
-    return HttpResponse("ZAP scan initiated")      
+def map_to_owasp_top_10(alert_description):
+    # This is a simplified example, you can expand it to be more comprehensive
+    mapping = {
+        'SQL Injection': 'A01:2021 - Broken Access Control',
+        'Cross-site Scripting (XSS)': 'A03:2021 - Injection',
+        'Insecure Deserialization': 'A08:2021 - Insecure Deserialization',
+        'Broken Authentication': 'A02:2021 - Cryptographic Failures',
+        # Add other mappings as necessary
+    }
+    
+    # Default category if the alert description is not found in the mapping
+    return mapping.get(alert_description, 'Other')
+
+def zap_scan_view(request):
+    if request.method == 'POST':
+        target_url = request.POST.get('target_url')
+        if not target_url:
+            return JsonResponse({'status': 'error', 'message': 'Target URL is required.'})
+        
+        zap = ZAPv2(apikey='v0719i017bo4pgn2turu6cffop', proxies={'http': 'http://localhost:8081', 'https': 'http://localhost:8081'})
+        
+        try:
+            # Start spidering the target
+            scan_id = zap.spider.scan(target_url)
+            while int(zap.spider.status(scan_id)) < 100:
+                time.sleep(1)
+
+            # Start active scan
+            ascan_id = zap.ascan.scan(target_url, 'True', 'False', '', '', '', '', '')
+            while int(zap.ascan.status(ascan_id)) < 100:
+                time.sleep(1)
+            
+            # Get scan results
+            alerts = zap.core.alerts(baseurl=target_url, start=0, count=1000)
+            
+            # Process results for the template
+            results = []
+            for alert in alerts:
+                results.append({
+                    'url': alert.get('url'),
+                    'description': alert.get('alert'),
+                    'risk': alert.get('risk'),
+                    'vulnerability_type': map_to_owasp_top_10(alert.get('alert')),
+                })
+            
+            return render(request, 'tools/zap_results.html', {'results': results, 'target_url': target_url})
+        
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+
+    return render(request, 'tools/zap_scan.html')
 

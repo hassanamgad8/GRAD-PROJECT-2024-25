@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tools',  # Add the tools app
-    'channels',
+    
 ]
 
 MIDDLEWARE = [
@@ -74,11 +74,6 @@ WSGI_APPLICATION = 'Pento.wsgi.application'
 
 ASGI_APPLICATION = 'Pento.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -92,23 +87,6 @@ DATABASES = {
 
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
 
 
 

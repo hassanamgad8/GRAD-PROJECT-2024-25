@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OWASP ZAP Scan</title>
+</head>
+<body>
+    <h2>OWASP ZAP Scan</h2>
+    <form method="POST" action="{% url 'zap_scan' %}">
+        {% csrf_token %}
+        <label for="target_url">Enter Target URL:</label>
+        <input type="text" name="target_url" id="target_url" required>
+        <button type="submit">Start Scan</button>
+    </form>
+    
+</body>
+</html>
