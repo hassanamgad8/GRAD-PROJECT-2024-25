@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tools',  # Add the tools app
-    'channels',
+    'channels',  
+    'metasploit'
 ]
 
 MIDDLEWARE = [

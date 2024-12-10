@@ -20,4 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tools.urls')),  # Include tools app URLs
+    path('tools/', include('tools.urls')),  # This includes all URLs from the tools app
+    path('admin/', admin.site.urls),       # Admin panel
+    path('', include('tools.urls')),       # Optional: Include tools app URLs at the root level
 ]
+

@@ -199,3 +199,19 @@ def zap_scan(request):
     # Your function code here
     return HttpResponse("ZAP scan initiated")      
 
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from metasploit.METAlogic.exploits import identify_ip_and_os  # Import your Metasploit logic
+
+def ip_os_identification_view(request):
+    if request.method == "POST":
+        ip_range = request.POST.get("ip_range")
+        if not ip_range:
+            return JsonResponse({"status": "error", "message": "IP range is required."}, status=400)
+
+        # Run the IP and OS identification function
+        result = identify_ip_and_os(ip_range)
+        return render(request, "identify.html", {"os_results": result.get("os_results", [])})
+
+    return render(request, "identify.html")

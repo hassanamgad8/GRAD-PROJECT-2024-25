@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IP and OS Identification</title>
+</head>
+<body>
+    <h1>IP and OS Identification</h1>
+    <form method="POST" action="{% url 'identify_ip_os' %}">
+        {% csrf_token %}
+        <label for="ip">Enter Target IP:</label>
+        <input type="text" id="ip" name="ip" placeholder="192.168.1.1" required>
+        <br>
+        <button type="submit">Start Identification</button>
+    </form>
+    
+    <div id="results">
+        {% if os_results %}
+            <h2>Results:</h2>
+            <ul>
+                {% for result in os_results %}
+                    <li>IP: {{ result.ip }} - OS: {{ result.os }} - Status: {{ result.status }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
