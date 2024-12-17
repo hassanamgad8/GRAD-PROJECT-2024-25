@@ -1,52 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pentesting Dashboard</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
 </head>
-<body style="background: url("{% static 'images/dark_theme_background.jpeg' %}") no-repeat center center fixed; background-size: cover;
+<body style="background: black;">
+    <canvas id="matrix"></canvas>
 
+    <div class="sidebar">
+        <button id="sidebar-toggle">☰</button>
+        <ul id="tools-list" class="tools hidden">
+            <li>
+                <a href="/nmap/" title="Nmap">
+                    <img src="{% static 'images/nmap.png' %}" alt="Nmap">
+                    <span class="tool-name">Nmap</span>
+                </a>
+            </li>
+            <li>
+                <a href="/whois/" title="Whois">
+                    <img src="{% static 'images/whois.png' %}" alt="Whois">
+                    <span class="tool-name">Whois</span>
+                </a>
+            </li>
+            <li>
+                <a href="/sublist3r/" title="Sublist3r">
+                    <img src="{% static 'images/sublist3r.png' %}" alt="Sublist3r">
+                    <span class="tool-name">Sublist3r</span>
+                </a>
+            </li>
+            <li>
+                <a href="/amass/" title="Amass">
+                    <img src="{% static 'images/amass.png' %}" alt="Amass">
+                    <span class="tool-name">Amass</span>
+                </a>
+            </li>
+            <li>
+                <a href="/zap/" title="ZAP">
+                    <img src="{% static 'images/zap.png' %}" alt="ZAP">
+                    <span class="tool-name">ZAP</span>
+                </a>
+            </li>
+            <li>
+                <a href="/sqlmap/" title="SQLMap">
+                    <img src="{% static 'images/sql_map.png' %}" alt="SQLMap">
+                    <span class="tool-name">SQLMap</span>
+                </a>
+            </li>
+            <li>
+                <a href="/xss/" title="XSS">
+                    <img src="{% static 'images/xss.png' %}" alt="XSS">
+                    <span class="tool-name">XSS</span>
+                </a>
+            </li>
+            <li>
+                <a href="/dns_lookup/" title="DNS Lookup">
+                    <img src="{% static 'images/dns_lookup.png' %}" alt="DNS">
+                    <span class="tool-name">DNS Lookup</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
-    <header>
-        <img src="{% static 'images/hacker_logo.png' %}" alt="Hacker Logo" style="width: 100px; display: block; margin: 20px auto;">
-    </header>
-    <h1>Welcome to  Pento Dashboard</h1>
-    <p>Select a tool to get started:</p>
-    <ul style="text-align: center;">
-        <li>
-            <a href="/nmap/">
-                <img src="{% static 'images/nmap.png' %}" alt="Nmap" style="width: 50px; vertical-align: middle;">
-                Nmap
-            </a>
-        </li>
-        <li>
-            <a href="/whois/">
-                <img src="{% static 'images/whois.png' %}" alt="Whois" style="width: 50px; vertical-align: middle;">
-                Whois
-            </a>
-        </li>
-        <li>
-            <a href="/sublist3r/">
-                <img src="{% static 'images/sublist3r.png' %}" alt="Sublist3r" style="width: 50px; vertical-align: middle;">
-                Sublist3r
-            </a>
-        </li>
-        <li>
-            <a href="/amass/">
-                <img src="{% static 'images/amass.png' %}" alt="Amass" style="width: 50px; vertical-align: middle;">
-                Amass
-            </a>
-        </li>
-        <li>
-            <a href="/zap/">
-                <img src="{% static 'images/zap.png' %}" alt="OWASP ZAP" style="width: 50px; vertical-align: middle;">
-                OWASP ZAP
-            </a>
-        </li>
-    </ul>
-
-    <script src="/static/js/script.js"></script>
+    <div class="content">
+        <h1 style="text-align: center; color: #fff;">Welcome to Pento Dashboard</h1>
+        <p style="text-align: center; color: #ddd;">
+            This penetration testing dashboard offers a suite of tools for recon, vulnerability scanning, and more.
+        </p>
+    </div>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/sidebar.js' %}"></script>
 </body>
 </html>

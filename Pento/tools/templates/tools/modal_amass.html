@@ -2,9 +2,9 @@
 <html>
 <head>
     <title>Amass Scan</title>
+    {% load static %}
 </head>
 <body>
-    {% load static %}
     <header>
         <img src="{% static 'images/amass.png' %}" alt="Amass Logo" style="width: 80px; display: block; margin: 10px auto;">
     </header>
@@ -15,9 +15,20 @@
         <input type="text" id="domain" name="domain">
         <button type="submit">Run Amass Scan</button>
     </form>
-    {% if amass_results %}
-    <h3>Amass Results:</h3>
-    <pre>{{ amass_results }}</pre>
-    {% endif %}
+    <div class="terminal">
+        <h3>Amass Terminal</h3>
+        <div id="terminal-output"></div>
+    </div>
+    <script>
+        const terminal = document.getElementById('terminal-output');
+        const eventSource = new EventSource("{% url 'amass_scan' %}");
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            terminal.innerHTML += `<p>${data.message}</p>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        };
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>

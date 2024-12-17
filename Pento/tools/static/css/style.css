@@ -100,3 +100,75 @@ header img {
     border: 2px solid #00ff00;
     box-shadow: 0 0 20px #00ff00;
 }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    background: #000;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+    z-index: 1000;
+}
+
+.sidebar:hover {
+    width: 200px;
+}
+
+.sidebar #sidebar-toggle {
+    background: none;
+    border: none;
+    color: #00ff00;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #00ff00;
+}
+
+.sidebar ul li a img {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.sidebar ul li a .tool-name {
+    display: none;
+    font-size: 14px;
+}
+
+.sidebar:hover ul li a .tool-name {
+    display: inline;
+}
+
+.terminal {
+    background: black;
+    color: green;
+    padding: 10px;
+    border: 1px solid green;
+    margin-top: 20px;
+    height: 200px;
+    overflow-y: auto;
+}
+
+
+.hidden {
+    display: none; /* By default, the tools list is hidden */
+}

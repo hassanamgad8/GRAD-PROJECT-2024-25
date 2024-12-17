@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Whois Lookup</title>
+    <title>XSS Scan</title>
     {% load static %}
 </head>
 <body>
-    <h2>Whois Lookup</h2>
-    <form method="POST" action="{% url 'whois_scan' %}">
+    <h1>XSS Vulnerability Scanner</h1>
+    <form method="POST" action="{% url 'xss_scan' %}">
         {% csrf_token %}
-        <label for="domain">Enter Domain:</label>
-        <input type="text" id="domain" name="domain" required>
-        <button type="submit">Get Whois Info</button>
+        <label for="xss-target">XSS Target URL:</label>
+        <input type="url" id="xss-target" name="target" required>
+        <button type="submit">Run XSS Scan</button>
     </form>
     <div class="terminal">
-        <h3>Whois Terminal</h3>
+        <h3>XSS Scan Terminal</h3>
         <div id="terminal-output"></div>
     </div>
     <script>
         const terminal = document.getElementById('terminal-output');
-        const eventSource = new EventSource("{% url 'whois_scan' %}");
+        const eventSource = new EventSource("{% url 'xss_scan' %}");
         eventSource.onmessage = function(event) {
             const data = JSON.parse(event.data);
             terminal.innerHTML += `<p>${data.message}</p>`;

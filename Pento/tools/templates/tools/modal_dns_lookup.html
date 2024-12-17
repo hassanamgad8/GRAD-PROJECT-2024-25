@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Whois Lookup</title>
+    <title>DNS Lookup</title>
     {% load static %}
 </head>
 <body>
-    <h2>Whois Lookup</h2>
-    <form method="POST" action="{% url 'whois_scan' %}">
+    <h1>DNS Lookup</h1>
+    <form method="POST" action="{% url 'dns_lookup' %}">
         {% csrf_token %}
-        <label for="domain">Enter Domain:</label>
+        <label for="domain">Domain Name:</label>
         <input type="text" id="domain" name="domain" required>
-        <button type="submit">Get Whois Info</button>
+        <button type="submit">Lookup</button>
     </form>
     <div class="terminal">
-        <h3>Whois Terminal</h3>
+        <h3>DNS Lookup Terminal</h3>
         <div id="terminal-output"></div>
     </div>
     <script>
         const terminal = document.getElementById('terminal-output');
-        const eventSource = new EventSource("{% url 'whois_scan' %}");
+        const eventSource = new EventSource("{% url 'dns_lookup' %}");
         eventSource.onmessage = function(event) {
             const data = JSON.parse(event.data);
             terminal.innerHTML += `<p>${data.message}</p>`;

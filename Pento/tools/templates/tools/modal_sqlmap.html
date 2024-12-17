@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Whois Lookup</title>
+    <title>SQLMap Scan</title>
     {% load static %}
 </head>
 <body>
-    <h2>Whois Lookup</h2>
-    <form method="POST" action="{% url 'whois_scan' %}">
+    <h1>SQLMap Scan</h1>
+    <form method="POST" action="{% url 'sqlmap_scan' %}">
         {% csrf_token %}
-        <label for="domain">Enter Domain:</label>
-        <input type="text" id="domain" name="domain" required>
-        <button type="submit">Get Whois Info</button>
+        <label for="sqlmap-target">SQLMap Target URL:</label>
+        <input type="url" id="sqlmap-target" name="target" required>
+        <button type="submit">Run SQLMap</button>
     </form>
     <div class="terminal">
-        <h3>Whois Terminal</h3>
+        <h3>SQLMap Terminal</h3>
         <div id="terminal-output"></div>
     </div>
     <script>
         const terminal = document.getElementById('terminal-output');
-        const eventSource = new EventSource("{% url 'whois_scan' %}");
+        const eventSource = new EventSource("{% url 'sqlmap_scan' %}");
         eventSource.onmessage = function(event) {
             const data = JSON.parse(event.data);
             terminal.innerHTML += `<p>${data.message}</p>`;

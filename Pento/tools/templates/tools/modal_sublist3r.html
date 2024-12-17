@@ -2,14 +2,30 @@
 <html>
 <head>
     <title>Sublist3r Scan</title>
+    {% load static %}
 </head>
 <body>
     <h1>Sublist3r Subdomain Enumeration</h1>
-    <form method="post" action="{% url 'sublist3r_scan' %}">
+    <form method="POST" action="{% url 'sublist3r_scan' %}">
         {% csrf_token %}
         <label for="domain">Enter Domain:</label>
         <input type="text" id="domain" name="domain" required><br><br>
         <button type="submit">Run Scan</button>
     </form>
+    <div class="terminal">
+        <h3>Sublist3r Terminal</h3>
+        <div id="terminal-output"></div>
+    </div>
+    <script>
+        const terminal = document.getElementById('terminal-output');
+        const eventSource = new EventSource("{% url 'sublist3r_scan' %}");
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            terminal.innerHTML += `<p>${data.message}</p>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        };
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>

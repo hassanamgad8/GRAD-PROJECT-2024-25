@@ -2,14 +2,30 @@
 <html>
 <head>
     <title>Nmap Scan</title>
+    {% load static %}
 </head>
 <body>
     <h2>Nmap Scan</h2>
-    <form method="POST" action="/nmap/">
+    <form method="POST" action="{% url 'nmap_scan' %}">
         {% csrf_token %}
         <label for="target">Target:</label>
         <input type="text" name="target" required>
         <button type="submit">Scan</button>
     </form>
+    <div class="terminal">
+        <h3>Nmap Terminal</h3>
+        <div id="terminal-output"></div>
+    </div>
+    <script>
+        const terminal = document.getElementById('terminal-output');
+        const eventSource = new EventSource("{% url 'nmap_scan_progress' %}");
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            terminal.innerHTML += `<p>${data.message}</p>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        };
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>

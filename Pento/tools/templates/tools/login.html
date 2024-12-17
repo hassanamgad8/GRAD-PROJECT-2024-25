@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pento Login</title>
+    {% load static %}
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div style="text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <img src="{% static 'images/hacker_logo.png' %}" alt="Hacker Logo" style="width: 150px; margin-bottom: 20px;">
+        <h1 style="color: green;">Welcome to Pento</h1>
+        <form method="POST" action="{% url 'login' %}" style="margin-top: 20px;">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" style="padding: 10px; margin: 5px;"><br>
+            <input type="password" name="password" placeholder="Password" style="padding: 10px; margin: 5px;"><br>
+            <button type="submit" style="padding: 10px 20px; margin-top: 10px; background-color: green; color: black;">Login</button>
+        </form>
+        {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+    </div>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

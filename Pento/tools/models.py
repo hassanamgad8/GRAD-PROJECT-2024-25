@@ -1,13 +1,13 @@
 from django.db import models
 
 class ScanResult(models.Model):
-    tool_name = models.CharField(max_length=50)
-    target = models.CharField(max_length=100)
+    tool_name = models.CharField(max_length=100)
+    target = models.CharField(max_length=255)
     result = models.TextField()
-    scanned_at = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.tool_name} - {self.target}'
+        return f"{self.tool_name} - {self.target}"
 
 class WhoisLookup(models.Model):
     domain = models.CharField(max_length=100)
