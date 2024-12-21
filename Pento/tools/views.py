@@ -12,6 +12,7 @@ from .models import AmassScan
 import dns.resolver
 import sublist3r
 import re
+import dns.resolver
 import logging
 from zapv2 import ZAPv2
 import time
