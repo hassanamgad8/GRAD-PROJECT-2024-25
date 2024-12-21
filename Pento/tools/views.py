@@ -1,8 +1,12 @@
 import subprocess
+from django.urls import reverse
 import whois
-from django.http import JsonResponse, StreamingHttpResponse
+from django.http import HttpResponseRedirect, JsonResponse, StreamingHttpResponse
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import ScanResult
 from .models import AmassScan
 import dns.resolver
@@ -21,6 +25,31 @@ import json
 
 
 
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None and username == 'admin' and password == 'admin':
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            return render(request, 'tools/login.html', {'error_message': 'Invalid login attempt'})
+    return render(request, 'tools/login.html')
+
+@login_required
+def dashboard_view(request):
+    return render(request, 'tools/dashboard.html')
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return HttpResponseRedirect(reverse('login'))
+    else:
+        return HttpResponse(status=405)  # Method Not Allowed
+
+
 def whois_view(request):
     domain = request.POST.get('domain')
     print("Domain Submitted:", domain)  # Debugging the form data
@@ -37,8 +66,7 @@ def whois_view(request):
 
 
 
-def index(request):
-    return render(request, 'tools/index.html')
+
 
 def sublist3r_scan(request):
     """
@@ -408,28 +436,6 @@ def format_xss_output(output):
     return "<pre>" + output.replace("\n", "<br>").replace("\t", "&emsp;") + "</pre>"
 
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if username == 'admin' and password == 'admin':
-            return redirect('dashboard')  # Redirects to the dashboard
-        else:
-            return render(request, 'login.html', {'error_message': 'Invalid login attempt'})
-    return render(request, 'tools/login.html') 
-
-
-
-
-def dashboard_view(request):
-    # Ensure the user is authenticated (optional: based on your project setup)
-    if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to the login page if not authenticated
-
-    # Pass any necessary context data to the dashboard template (if needed)
-    return render(request, 'tools/index.html')
-
-
 
 
 def nmap_scan_progress(request):
@@ -444,3 +450,21 @@ def nmap_scan_progress(request):
             yield f"data: {json.dumps({'message': step})}\n\n"
             time.sleep(2)  # Simulates progress delay
     return StreamingHttpResponse(generate_progress(), content_type='text/event-stream')
+
+
+def dashboard(request):
+    context = {
+        'activities': [
+            {
+                'type': 'threat',
+                'title': 'Emerging Threat Detected',
+                'description': 'New vulnerability CVE-2024-1234 detected',
+                'timestamp': '2 hours ago'
+            },
+            # Add more activity items as needed
+        ]
+    }
+    return render(request, 'dashboard.html', context)
+
+
+

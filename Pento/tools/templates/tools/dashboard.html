@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pento Security Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .dashboard-container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #1a1a1a;
+            padding: 20px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <canvas id="matrix"></canvas>
+    
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="{% static 'images/hacker_logo.png' %}" alt="Pento" class="sidebar-logo">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                </button>
+            </div>
+            
+            <ul class="tool-list">
+                <li class="tool-category">Reconnaissance</li>
+                <li>
+                    <a href="/nmap/" class="tool-link">
+                        <img src="{% static 'images/nmap.png' %}" alt="Nmap">
+                        <span class="tool-name">Nmap Scanner</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/whois/" class="tool-link">
+                        <img src="{% static 'images/whois.png' %}" alt="Whois">
+                        <span class="tool-name">Whois Lookup</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/dns_lookup/" class="tool-link">
+                        <img src="{% static 'images/dns_lookup.png' %}" alt="DNS Lookup">
+                        <span class="tool-name">DNS Lookup</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                
+                <li class="tool-category">Enumeration</li>
+                <li>
+                    <a href="/sublist3r/" class="tool-link">
+                        <img src="{% static 'images/sublist3r.png' %}" alt="Sublist3r">
+                        <span class="tool-name">Sublist3r</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/amass/" class="tool-link">
+                        <img src="{% static 'images/amass.png' %}" alt="Amass">
+                        <span class="tool-name">Amass Scanner</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                
+                <li class="tool-category">Web Security</li>
+                <li>
+                    <a href="/zap/" class="tool-link">
+                        <img src="{% static 'images/zap.png' %}" alt="ZAP">
+                        <span class="tool-name">OWASP ZAP</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/sqlmap/" class="tool-link">
+                        <img src="{% static 'images/sql_map.png' %}" alt="SQLMap">
+                        <span class="tool-name">SQL Map</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/xss/" class="tool-link">
+                        <img src="{% static 'images/xss.png' %}" alt="XSS">
+                        <span class="tool-name">XSS Scanner</span>
+                        <div class="tool-hover"></div>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1>Security Operations Center</h1>
+                <div class="user-controls">
+                    <span class="username">{{ user.username }}</span>
+                    <form action="{% url 'logout' %}" method="POST" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-button">Logout</button>
+                    </form>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <div class="grid-item tool-stats">
+                    <h2>Active Scans</h2>
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Running</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">12</span>
+                            <span class="stat-label">Queued</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">45</span>
+                            <span class="stat-label">Completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-item recent-activity">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <span class="activity-time">Now</span>
+                            <span class="activity-desc">Nmap scan completed for target.com</span>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-time">5m ago</span>
+                            <span class="activity-desc">SQL injection test started</span>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-time">15m ago</span>
+                            <span class="activity-desc">New vulnerability detected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
