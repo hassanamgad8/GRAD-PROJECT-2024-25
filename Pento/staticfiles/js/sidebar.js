@@ -6,4 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
     sidebarToggle.addEventListener('click', function () {
         toolsList.classList.toggle('hidden');
     });
+
+    // Sidebar functionality (from previous script)
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+    }
 });

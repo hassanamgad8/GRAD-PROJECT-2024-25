@@ -5,13 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pento Security - Login</title>
     {% load static %}       
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Ensure the canvas covers the entire screen */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Send behind the login form */
+        }
+    </style>
 </head>
 <body class="login-page">
+    <!-- Matrix effect canvas -->
+    <canvas id="matrix"></canvas>
+
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <img src="/static/images/hacker_logo.png" alt="Pento Security" class="login-logo">
+                <img src="{% static 'images/hacker_logo.png' %}" alt="Pento Security" class="login-logo">
                 <h1 class="login-title">Pento Security</h1>
             </div>
             <form method="post" action="{% url 'login' %}" class="login-form">

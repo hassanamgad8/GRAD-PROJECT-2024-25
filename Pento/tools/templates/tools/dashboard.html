@@ -6,30 +6,10 @@
     <title>Pento Security Dashboard</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        .dashboard-container {
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            overflow-y: auto;
-            position: fixed;
-            left: 0;
-            top: 0;
-            background-color: #1a1a1a;
-            padding: 20px;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            width: calc(100% - 250px);
-        }
-    </style>
 </head>
 <body class="dashboard-page">
     <canvas id="matrix"></canvas>
-    
+
     <div class="dashboard-container">
         <nav class="sidebar">
             <div class="sidebar-header">
@@ -38,8 +18,8 @@
                     <span></span>
                 </button>
             </div>
-            
-            <ul class="tool-list">
+
+            <ul id="tools-list" class="tool-list">
                 <li class="tool-category">Reconnaissance</li>
                 <li>
                     <a href="/nmap/" class="tool-link">
@@ -62,7 +42,7 @@
                         <div class="tool-hover"></div>
                     </a>
                 </li>
-                
+
                 <li class="tool-category">Enumeration</li>
                 <li>
                     <a href="/sublist3r/" class="tool-link">
@@ -78,7 +58,7 @@
                         <div class="tool-hover"></div>
                     </a>
                 </li>
-                
+
                 <li class="tool-category">Web Security</li>
                 <li>
                     <a href="/zap/" class="tool-link">
@@ -157,5 +137,6 @@
     </div>
 
     <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/sidebar.js' %}"></script>
 </body>
 </html>

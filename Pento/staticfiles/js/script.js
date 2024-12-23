@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Matrix background effect
     const canvas = document.getElementById('matrix');
+    if (!canvas) {
+        console.error('Matrix canvas element not found.');
+        return;
+    }
+
     const ctx = canvas.getContext('2d');
 
     // Set canvas size
@@ -18,17 +23,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const drops = Array(columns).fill(1);
 
     function drawMatrix() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = '#0F0';
+        ctx.fillStyle = '#00FF33';
         ctx.font = `${fontSize}px monospace`;
-
+    
         drops.forEach((y, index) => {
             const text = characters[Math.floor(Math.random() * characters.length)];
             ctx.fillText(text, index * fontSize, y * fontSize);
-
-            if (y * fontSize > canvas.height && Math.random() > 0.95) {
+    
+            if (y * fontSize > canvas.height && Math.random() > 0.975) {
                 drops[index] = 0;
             }
             drops[index]++;
@@ -37,27 +41,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setInterval(drawMatrix, 50);
 
-    // Sidebar functionality
-    const sidebar = document.querySelector('.sidebar');
-    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    // Tool link hover effect (only if tool links are present)
     const toolLinks = document.querySelectorAll('.tool-link');
+    if (toolLinks.length > 0) {
+        toolLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                const hoverElement = link.querySelector('.tool-hover');
+                if (hoverElement) {
+                    hoverElement.style.width = '100%';
+                }
+            });
 
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-    });
-
-    // Tool link hover effect
-    toolLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            link.querySelector('.tool-hover').style.width = '100%';
+            link.addEventListener('mouseleave', () => {
+                const hoverElement = link.querySelector('.tool-hover');
+                if (hoverElement) {
+                    hoverElement.style.width = '0%';
+                }
+            });
         });
+    }
 
-        link.addEventListener('mouseleave', () => {
-            link.querySelector('.tool-hover').style.width = '0%';
-        });
-    });
-
-    // Modal functionality
+    // Modal functionality (only if tool links are present)
     const modalOverlay = document.createElement('div');
     modalOverlay.classList.add('modal-overlay');
     document.body.appendChild(modalOverlay);

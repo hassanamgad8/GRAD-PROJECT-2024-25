@@ -31,7 +31,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.1;
+    opacity: 0.5;
     z-index: -1;
 }
 
@@ -45,9 +45,21 @@ body {
 }
 
 .login-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
+    position: relative;
+    z-index: 10; /* Ensures it's above the canvas */
+    background-color: rgba(0, 0, 0, 0.9); /* Slight transparency */
+    box-shadow: 0 0 20px #00ff33; /* Green glow around the card */
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Make the background canvas blend well with the design */
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0; /* Keeps the canvas in the background */
+    pointer-events: none; /* Ensures it doesn't interfere with interactions */
 }
 
 .login-card {

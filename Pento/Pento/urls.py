@@ -16,11 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponseRedirect
-from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tools.urls')),  # Include tools app URLs
-    path('logout/', LogoutView.as_view(), name='logout'),
 ]
