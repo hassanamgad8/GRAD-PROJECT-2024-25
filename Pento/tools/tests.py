@@ -1,3 +1,4 @@
 from django.test import TestCase
 
-# Create your tests here.
+import sublist3r
+sublist3r.main('example.com', 10, 'output.txt', None, False, True, False, None)

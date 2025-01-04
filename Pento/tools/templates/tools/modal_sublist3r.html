@@ -1,31 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sublist3r Scan</title>
-    {% load static %}
+    <title>Subdomain Finder</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #0be021;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #09cb4a;
+        }
+        .description-section {
+            margin-top: 40px;
+        }
+        fieldset {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+        }
+        legend {
+            font-weight: bold;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Sublist3r Subdomain Enumeration</h1>
-    <form method="POST" action="{% url 'sublist3r_scan' %}">
+    <h2>Subdomain Finder</h2>
+    <form method="POST" action="{% url 'subdomain_finder' %}">
         {% csrf_token %}
-        <label for="domain">Enter Domain:</label>
-        <input type="text" id="domain" name="domain" required><br><br>
-        <button type="submit">Run Scan</button>
-    </form>
-    <div class="terminal">
-        <h3>Sublist3r Terminal</h3>
-        <div id="terminal-output"></div>
-    </div>
-    <script>
-        const terminal = document.getElementById('terminal-output');
-        const eventSource = new EventSource("{% url 'sublist3r_scan' %}");
-        eventSource.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            terminal.innerHTML += `<p>${data.message}</p>`;
-            terminal.scrollTop = terminal.scrollHeight;
-        };
-    </script>
-    <script src="{% static 'js/script.js' %}"></script>
+        <fieldset>
+            <legend>Subdomain Finder Options</legend>
+            <label for="domain">Domain:</label>
+            <input type="text" id="domain" name="domain" placeholder="e.g., example.com" required>
 
+            <label><input type="checkbox" name="brute_force" value="true"> Enable Brute Force</label>
+            <label><input type="number" name="thread_count" value="10" min="1" max="100"> Thread Count</label>
+            <label><input type="checkbox" name="resolve_ips" value="true"> Resolve IP Addresses</label>
+            <label>
+                Exclude Subdomains:
+                <input type="text" name="exclude_subdomains" placeholder="Comma-separated subdomains to exclude">
+            </label>
+            <label>
+                Search Depth:
+                <input type="number" name="depth" value="1" min="1" placeholder="Specify search depth">
+            </label>
+            <label><input type="checkbox" name="visualize" value="true"> Generate Visualization</label>
+            <label><input type="checkbox" name="quick_scan" value="true"> Quick Scan</label>
+            <label><input type="checkbox" name="comprehensive_scan" value="true"> Comprehensive Scan</label>
+            <label><input type="checkbox" name="stealth_mode" value="true"> Stealth Mode</label>
+            <label><input type="checkbox" name="save_txt" value="true"> Save Results as TXT</label>
+            <label><input type="checkbox" name="save_csv" value="true"> Save Results as CSV</label>
+        </fieldset>
+        <button type="submit">Run Subdomain Finder</button>
+    </form>
+
+    <!-- Table of Option Descriptions -->
+    <div class="description-section">
+        <h3>Subdomain Finder Options Description</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Domain</td>
+                    <td>Specify the target domain for subdomain enumeration.</td>
+                </tr>
+                <tr>
+                    <td>Enable Brute Force</td>
+                    <td>Perform DNS brute-forcing to discover additional subdomains.</td>
+                </tr>
+                <tr>
+                    <td>Thread Count</td>
+                    <td>Set the number of threads to control the speed of the scan.</td>
+                </tr>
+                <tr>
+                    <td>Resolve IP Addresses</td>
+                    <td>Resolve discovered subdomains to their corresponding IP addresses.</td>
+                </tr>
+                <tr>
+                    <td>Exclude Subdomains</td>
+                    <td>Ignore specific subdomains by providing a comma-separated list.</td>
+                </tr>
+                <tr>
+                    <td>Search Depth</td>
+                    <td>Define how deep Sublist3r searches for subdomains.</td>
+                </tr>
+                <tr>
+                    <td>Generate Visualization</td>
+                    <td>Create a graphical representation of the discovered subdomains.</td>
+                </tr>
+                <tr>
+                    <td>Quick Scan</td>
+                    <td>Perform a fast scan using minimal sources.</td>
+                </tr>
+                <tr>
+                    <td>Comprehensive Scan</td>
+                    <td>Perform an in-depth scan using all available sources and brute-forcing.</td>
+                </tr>
+                <tr>
+                    <td>Stealth Mode</td>
+                    <td>Slow down the scan to avoid detection or being blocked.</td>
+                </tr>
+                <tr>
+                    <td>Save Results as TXT</td>
+                    <td>Save the output of the scan in a TXT file.</td>
+                </tr>
+                <tr>
+                    <td>Save Results as CSV</td>
+                    <td>Save the output of the scan in a CSV file.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
