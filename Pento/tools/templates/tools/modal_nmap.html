@@ -109,6 +109,9 @@
             <label>Use Decoys:
                 <input type="text" name="decoys" placeholder="e.g., RND:10">
             </label>
+            <label>Script:
+                <input type="text" name="nmap_scripts" placeholder="e.g., default or vuln">
+            </label>
         </fieldset>
 
         <!-- Output Options -->
@@ -226,6 +229,7 @@
         </table>
     </div>
     <!-- Include port_scanner.js -->
-    <script src="{% static 'js/port_scanner.js' %}"></script>
-    </body>
+    <script src="{% static 'js/script.js' %}"></script>
+
+  </body>
 </html>

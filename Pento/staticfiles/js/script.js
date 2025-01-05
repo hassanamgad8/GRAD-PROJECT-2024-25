@@ -1,14 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const dashboardBtn = document.getElementById("dashboard-btn");
     const newScanBtn = document.getElementById("new-scan-btn");
     const reportsBtn = document.getElementById("reports-btn");
-    const dashboardBtn = document.getElementById("dashboard-btn");
     const mainContent = document.getElementById("main-content");
     const attackSurfaceBtn = document.getElementById("attack-surface-btn");
     const assetsBtn = document.getElementById("assets-btn");
     const findingsBtn = document.getElementById("findings-btn");
+   
+    
 
 
 
+
+
+
+
+    
 
 // Load Assets dynamically
 assetsBtn.addEventListener("click", function () {
@@ -215,6 +222,7 @@ findingsBtn.addEventListener("click", function () {
     setInterval(drawMatrix, 50);
 
     // Function to load the Dashboard view
+    // Function to load the Dashboard view
     function loadDashboard() {
         mainContent.innerHTML = `
             <header class="dashboard-header">
@@ -285,86 +293,136 @@ findingsBtn.addEventListener("click", function () {
         loadChart(); // Reload chart when Dashboard loads
     }
 
+    // Function to load Chart in Dashboard
+    function loadChart() {
+        const ctx = document.getElementById("active-scans-chart").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Running", "Queued", "Completed"],
+                datasets: [
+                    {
+                        label: "# of Scans",
+                        data: [3, 2, 5],
+                        backgroundColor: ["#00FF00", "#FFFF00", "#FF0000"],
+                    },
+                ],
+            },
+        });
+    }
+
+    // Function to load Domain Finder
+    function loadDomainFinder() {
+        fetch('/domain_finder/')
+            .then((response) => response.text())
+            .then((html) => {
+                mainContent.innerHTML = html;
+
+                const form = document.querySelector('form');
+                const resultsDiv = document.getElementById('scan-output');
+
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    resultsDiv.textContent = "Running scan...";
+
+                    const formData = new FormData(form);
+
+                    fetch('/domain_finder/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                        },
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.result) {
+                                resultsDiv.textContent = data.result;
+                            } else if (data.error) {
+                                resultsDiv.textContent = `Error: ${data.error}`;
+                            }
+                        })
+                        .catch((error) => {
+                            resultsDiv.textContent = `Error: ${error.message}`;
+                        });
+                });
+            })
+            .catch((error) => {
+                console.error('Error loading Domain Finder:', error);
+                mainContent.innerHTML = `<p>Error loading tool. Please try again.</p>`;
+            });
+    }
+
+
+
     // Function to load New Scan view
     function loadNewScan() {
         mainContent.innerHTML = `
             <header class="dashboard-header">
                 <h1>New Scan</h1>
                 <p>Choose a tool below to start a new scan.</p>
+                
             </header>
             <div class="tools-grid">
-                <div class="tool-card">
-                    <img src="{% static 'images/port-scanner-icon.png' %}" alt="Port Scanner Icon" class="tool-icon">
+                <div class="tool-card" data-tool="port_scanner">
+                    
+                    <img src="${staticPaths.portScannerIcon}" alt="Port Scanner Icon" class="tool-icon">
                     <h3>Port Scanner</h3>
                     <p>Detect open ports and fingerprint services.</p>
                 </div>
-                <div class="tool-card">
-                    <img src="{% static 'images/domain-finder-icon.png' %}" alt="Domain Finder Icon" class="tool-icon">
+                <div class="tool-card" data-tool="domain_finder">
+                    <img src="${staticPaths.domainFinderIcon}" alt="domain finder Icon" class="tool-icon">
                     <h3>Domain Finder</h3>
                     <p>Discover domains related to a target.</p>
                 </div>
-                <div class="tool-card">
-                    <img src="{% static 'images/subdomain-finder-icon.png' %}" alt="Subdomain Finder Icon" class="tool-icon">
+                <div class="tool-card" data-tool="subdomain_finder">
+                    <img src="${staticPaths.subdomainFinderIcon}" alt="subdomain finder Icon" class="tool-icon">
                     <h3>Subdomain Finder</h3>
                     <p>Discover subdomains of a domain.</p>
                 </div>
-                <div class="tool-card">
-                    <img src="{% static 'images/website-scanner-icon.png' %}" alt="Website Scanner Icon" class="tool-icon">
+                <div class="tool-card" data-tool="website_scanner">
+                    <img src="${staticPaths.websiteScannerIcon}" alt="website scanner Icon" class="tool-icon">
                     <h3>Website Scanner</h3>
                     <p>Discover XSS, SQLi, RCE, and 70+ web application issues.</p>
                 </div>
-                <div class="tool-card">
-                    <img src="{% static 'images/whois-lookup-icon.png' %}" alt="Whois Lookup Icon" class="tool-icon">
+                <div class="tool-card" data-tool="whois">
+                    <img src="${staticPaths.whoisLookupIcon}" alt="whois Icon" class="tool-icon">
                     <h3>Whois Lookup</h3>
                     <p>Find the owner of a domain name or IP address and their contact data.</p>
                 </div>
-                <div class="tool-card">
-                    <img src="{% static 'images/dns-lookup-icon.png' %}" alt="Dns Lookup Icon" class="tool-icon">
+                <div class="tool-card" data-tool="dns_lookup">
+                    <img src="${staticPaths.dnsLookupIcon}" alt="dns lookup Icon" class="tool-icon">
                     <h3>Dns Lookup</h3>
                     <p>Find the IP of a domain name .</p>
                 </div>
             </div>
         `;
+        // Attach event listeners to the tool cards
+        document.querySelectorAll(".tool-card").forEach((card) => {
+            card.addEventListener("click", function () {
+                const tool = this.getAttribute("data-tool");
+                loadToolForm(tool);
+            });
+        });
+    }
+
+    // Function to load a tool's form
+    function loadToolForm(tool) {
+        fetch(`/${tool}/`)
+            .then((response) => response.text())
+            .then((html) => {
+                mainContent.innerHTML = html;
+            })
+            .catch((error) => {
+                console.error(`Error loading tool ${tool}:`, error);
+                mainContent.innerHTML = `<p>Error loading tool. Please try again.</p>`;
+            });
+    
     
 
     }
     
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-    const csrftoken = getCookie('csrftoken');
-    
-    fetch('/logout/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,  // Include the CSRF token
-        },
-        body: JSON.stringify({}),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-    
-    
+  
 
 
     // Function to load Reports view
@@ -390,28 +448,13 @@ findingsBtn.addEventListener("click", function () {
         `;
     }
 
-    // Function to load Chart in Dashboard
-    function loadChart() {
-        const ctx = document.getElementById("active-scans-chart").getContext("2d");
-        new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: ["Running", "Queued", "Completed"],
-                datasets: [
-                    {
-                        label: "# of Scans",
-                        data: [3, 2, 5],
-                        backgroundColor: ["#00FF00", "#FFFF00", "#FF0000"],
-                    },
-                ],
-            },
-        });
-    }
+    
 
     // Event Listeners
+    dashboardBtn.addEventListener("click", loadDashboard);
     newScanBtn.addEventListener("click", loadNewScan);
     reportsBtn.addEventListener("click", loadReports);
-    dashboardBtn.addEventListener("click", loadDashboard);
+    
 
     // Load Dashboard by default
     loadDashboard();

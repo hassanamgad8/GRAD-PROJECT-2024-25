@@ -417,3 +417,60 @@ body {
     font-size: 0.9rem;
     color: var(--text-secondary);
 }
+
+
+/* Progress Bar Styles */
+#progress-container {
+    margin-top: 20px;
+}
+
+#progress-bar {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progress-bar-fill {
+    width: 0%;
+    height: 30px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    transition: width 0.5s;
+}
+
+#progress-text {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Terminal Styles */
+#terminal {
+    background-color: #000;
+    color: #0f0;
+    padding: 10px;
+    margin-top: 20px;
+    height: 300px;
+    overflow-y: scroll;
+    font-family: monospace;
+    border: 1px solid #0be021;
+    border-radius: 5px;
+}
+
+/* Scan Result Styles */
+#scan-result-container {
+    margin-top: 20px;
+}
+
+#scan-result {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-family: monospace;
+    border: 1px solid #0be021;
+}

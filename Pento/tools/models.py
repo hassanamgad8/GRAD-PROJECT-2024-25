@@ -27,7 +27,7 @@ class ScanConfig(models.Model):
 
 
 class Report(models.Model):
-    # Added 'scan_type' field
+    # Type of scan performed
     scan_type = models.CharField(
         max_length=100,
         choices=[
@@ -41,43 +41,58 @@ class Report(models.Model):
         ],
         help_text="Type of scan performed."
     )
-    
+
+    # The target domain, IP, or URL of the scan
     target = models.CharField(max_length=255, help_text="The target domain, IP, or URL of the scan.")
-    result = models.TextField(help_text="The raw result of the scan.")
-    
-    # Removed duplicate 'status' field and kept one definition
+
+    # Status of the scan
     status = models.CharField(
         max_length=50,
         choices=[
             ('queued', 'Queued'),
             ('running', 'Running'),
             ('completed', 'Completed'),
-            ('failed', 'Failed')
+            ('failed', 'Failed'),
         ],
         default='queued',
         help_text="The current status of the scan."
     )
-    
-    # Removed duplicate 'progress' field and kept one definition
+
+    # Progress percentage of the scan
     progress = models.IntegerField(default=0, help_text="Progress percentage of the scan.")
-    
-    timestamp = models.DateTimeField(auto_now_add=True, help_text="The time when the scan was initiated.")
+
+    # Raw result of the scan
+    result = models.TextField(blank=True, help_text="The raw result of the scan.")
+
+    # User who initiated the scan
+    created_by = models.CharField(max_length=150, null=True, blank=True, help_text="The user who initiated the scan.")
+
+    # Timestamps for creation and updates
+    created_at = models.DateTimeField(auto_now_add=True, help_text="The time when the scan was initiated.")
     updated_at = models.DateTimeField(auto_now=True, help_text="The time when the scan was last updated.")
-    created_by = models.CharField(max_length=100, null=True, blank=True, help_text="The user who initiated the scan.")
-    
+
+    # Configuration used for the scan
     scan_config = models.ForeignKey(
-        ScanConfig, null=True, blank=True, on_delete=models.SET_NULL, help_text="Configuration used for the scan."
+        'ScanConfig', null=True, blank=True, on_delete=models.SET_NULL, help_text="Configuration used for the scan."
     )
-    
+
+    # Summary of vulnerabilities grouped by severity levels (e.g., Critical, High, etc.)
     severity_summary = models.JSONField(
-        null=True, blank=True, help_text="Summary of vulnerabilities grouped by severity levels (Critical, High, etc.)."
+        null=True, blank=True, help_text="Summary of vulnerabilities grouped by severity levels."
     )
-    export_path = models.CharField(max_length=255, null=True, blank=True, help_text="Path to the exported report file.")
+
+    # Path to the exported report file
+    export_path = models.CharField(
+        max_length=255, null=True, blank=True, help_text="Path to the exported report file."
+    )
 
     class Meta:
-        ordering = ['-timestamp']
+        ordering = ['-created_at']  # Order by creation time (latest first)
         verbose_name = "Scan Report"
         verbose_name_plural = "Scan Reports"
+
+    def __str__(self):
+        return f"{self.scan_type} - {self.target} ({self.created_at.strftime('%Y-%m-%d %H:%M:%S')})"
 
     def __str__(self):
         return f"{self.scan_type} - {self.target} ({self.timestamp.strftime('%Y-%m-%d %H:%M:%S')})"

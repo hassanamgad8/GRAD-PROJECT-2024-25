@@ -1,0 +1,14 @@
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-01-05 21:06 Egypt Standard Time
+Nmap scan report for csp3.zte.com.cn (192.168.1.1)
+Host is up (0.0073s latency).
+Not shown: 65529 closed tcp ports (reset)
+PORT      STATE         SERVICE
+22/tcp    open|filtered ssh
+23/tcp    open|filtered telnet
+53/tcp    open|filtered domain
+80/tcp    open|filtered http
+443/tcp   open|filtered https
+52869/tcp open|filtered unknown
+MAC Address: E0:19:54:66:0A:20 (zte)
+
+Nmap done: 1 IP address (1 host up) scanned in 55.31 seconds

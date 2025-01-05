@@ -1,0 +1,7 @@
+# Nmap 7.95 scan initiated Sun Jan  5 21:48:57 2025 as: nmap -oN C:\\Users\\omarzNmap scan report for csp1.zte.com.cn (192.168.1.1)
+Host is up (0.0020s latency).
+MAC Address: E0:19:54:66:0A:20 (zte)
+Nmap done: 1 IP address (1 host up) scanned in 0.87 seconds
+
+MAC Address: E0:19:54:66:0A:20 (zte)
+# Nmap done at Sun Jan  5 21:48:58 2025 -- 1 IP address (1 host up) scanned in 0.87 seconds

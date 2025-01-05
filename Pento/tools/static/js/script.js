@@ -461,5 +461,62 @@ findingsBtn.addEventListener("click", function () {
 });
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    const mainContent = document.getElementById("main-content");
 
+    function loadProgressPage() {
+        fetch("/progress/")
+            .then((response) => response.text())
+            .then((html) => {
+                mainContent.innerHTML = html;
+            })
+            .catch((error) => {
+                console.error("Error loading progress page:", error);
+            });
+    }
 
+    function fetchProgress(scanId) {
+        fetch(`/scan_progress/${scanId}/`) // Fetch progress from the server
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+    
+                // Update progress bar
+                const progressBarFill = document.getElementById("progress-bar-fill");
+                progressBarFill.style.width = `${data.progress}%`;
+                progressBarFill.textContent = `${data.progress}%`;
+    
+                // Update terminal output
+                const terminalOutput = document.getElementById("terminal-output");
+                terminalOutput.textContent = data.terminal_output;
+    
+                // Stop polling when the scan is completed or failed
+                if (data.status === "completed") {
+                    clearInterval(progressInterval);
+                    terminalOutput.textContent += "\nScan completed!";
+                } else if (data.status === "failed") {
+                    clearInterval(progressInterval);
+                    terminalOutput.textContent += "\nScan failed!";
+                }
+            })
+            .catch((error) => console.error("Error fetching scan progress:", error));
+    }
+    
+
+    function loadResultsPage(scanId) {
+        fetch(`/results/${scanId}/`)
+            .then((response) => response.text())
+            .then((html) => {
+                mainContent.innerHTML = html;
+            })
+            .catch((error) => {
+                console.error("Error loading results page:", error);
+            });
+    }
+
+    // Example usage: Call these functions when needed
+    document.getElementById("run-scan-btn").addEventListener("click", loadProgressPage);
+});

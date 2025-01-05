@@ -6,7 +6,7 @@ import whois
 from .models import Report
 from django.http import FileResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse, StreamingHttpResponse
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render , get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Finding , Technology , Port , Host , Report , ScanConfig
@@ -57,7 +57,8 @@ def dashboard_view(request):
         'zap': 'ZAP',
         'website_scanner': 'Website Scanner'
     }
-    reports = Report.objects.all().order_by('-timestamp')[:10]  # Fetch the latest 10 reports
+    # Order by 'created_at' instead of 'timestamp'
+    reports = Report.objects.all().order_by('-created_at')[:10]  # Fetch the latest 10 reports
 
     # Active scans data
     active_scans = {
@@ -272,7 +273,11 @@ def dns_lookup(request):
     return render(request, 'tools/modal_dns_lookup.html')
 
 
-# Nmap Scanner
+
+logger = logging.getLogger(__name__)
+
+
+
 @login_required
 def nmap_scan(request):
     if request.method == 'POST':
@@ -284,103 +289,280 @@ def nmap_scan(request):
         enable_version = request.POST.get('enable_version')
         timing_template = request.POST.get('timing_template')
         decoys = request.POST.get('decoys')
-        # Add other fields as necessary
+        custom_ports = request.POST.get('custom_ports')
+        nmap_scripts = request.POST.get('nmap_scripts')
 
-        # Determine scan_type based on form inputs or predefined logic
-        scan_type = 'port_scanner'  # Example: you might determine this dynamically
+        # Validate target input
+        if not target or not re.match(r'^[\w\-\.\:\/]+$', target):
+            return JsonResponse({'error': 'Invalid target specified'}, status=400)
 
-        # Create a new Report instance
+        # Create a new Report instance first
         report = Report.objects.create(
-            scan_type=scan_type,
+            scan_type='port_scanner',
             target=target,
             status='queued',
             progress=0,
             created_by=request.user.username,
-            # Add other fields as necessary
         )
 
-        # Start the scan in a separate thread
+        # Create base command with proper flags
+        command = ['nmap', '-oN']
+        
+        # Define the reports directory and output file path
+        reports_dir = os.path.join(os.path.dirname(__file__), 'reports')
+        os.makedirs(reports_dir, exist_ok=True)
+        output_file = f'output_{report.id}.txt'  # Now report.id is defined
+        output_path = os.path.join(reports_dir, output_file)
+        command.append(output_path)
+
+        # Add ping option
+        if enable_ping == 'no-ping':
+            command.append('-Pn')
+        elif enable_ping == 'ping-only':
+            command.append('-sn')
+
+        # Add port scan type
+        if port_scan == 'quick':
+            command.append('-F')
+        elif port_scan == 'full':
+            command.append('-p-')
+
+        # Add scan technique
+        if scan_technique:
+            scan_flags = {
+                'syn': '-sS',
+                'tcp': '-sT',
+                'udp': '-sU',
+                'ack': '-sA'
+            }
+            if scan_technique in scan_flags:
+                command.append(scan_flags[scan_technique])
+
+        # Version detection
+        if enable_version == 'on':
+            command.append('-sV')
+
+        # Timing template
+        if timing_template:
+            if timing_template in ['T0', 'T1', 'T2', 'T3', 'T4', 'T5']:
+                command.append(f'-{timing_template}')
+
+        # Add decoys
+        if decoys:
+            # Split and validate decoy IPs
+            decoy_list = [d.strip() for d in decoys.split(',')]
+            valid_decoys = []
+            for decoy in decoy_list:
+                if re.match(r'^(\d{1,3}\.){3}\d{1,3}$', decoy):
+                    valid_decoys.append(decoy)
+            if valid_decoys:
+                command.append('-D')
+                command.append(','.join(valid_decoys))
+
+        # Add custom ports
+        if custom_ports:
+            if re.match(r'^[\d,\-]+$', custom_ports):
+                command.extend(['-p', custom_ports])
+
+        # Add NSE scripts
+        if nmap_scripts:
+            safe_scripts = ['default', 'discovery', 'safe', 'auth', 'vuln']
+            if nmap_scripts in safe_scripts:
+                command.extend(['--script', nmap_scripts])
+
+        # Add verbosity for better progress tracking
+        command.append('-v')
+
+        # Add target last
+        command.append(target)
+
+        # Define run_scan function with proper report access
         def run_scan(report_id):
-            # Update status to 'running'
-            report = Report.objects.get(id=report_id)
-            report.status = 'running'
-            report.save()
-
-            # Example Nmap command
-            command = ['nmap']
-            if enable_ping:
-                command.append(enable_ping)
-            if port_scan:
-                command.append(port_scan)
-            if scan_technique:
-                command.append(scan_technique)
-            if enable_version:
-                command.append(enable_version)
-            if timing_template:
-                command.append(timing_template)
-            if decoys:
-                command.append('--decoy')
-                command.append(decoys)
-            command.append(target)
-
-            # Execute Nmap scan
             try:
-                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                for line in process.stdout:
-                    # Here you can parse the output to determine progress
-                    # For simplicity, we'll increment progress periodically
-                    current_progress = report.progress + 1
-                    report.progress = min(current_progress, 100)
-                    report.save()
-                    time.sleep(0.1)  # Simulate work
+                report = Report.objects.get(id=report_id)
+                report.status = 'running'
+                report.save()
 
-                process.stdout.close()
+                # Log the command being executed
+                logging.info(f"Executing Nmap command: {' '.join(command)}")
+
+                process = subprocess.Popen(
+                    command,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    bufsize=1,
+                    universal_newlines=True
+                )
+
+                output_buffer = []
+                with open(output_path, 'w') as f:
+                    while True:
+                        output = process.stdout.readline()
+                        if output == '' and process.poll() is not None:
+                            break
+                        if output:
+                            output_buffer.append(output)
+                            f.write(output)
+                            f.flush()
+                            
+                            # More detailed progress tracking
+                            if "Starting Nmap" in output:
+                                report.progress = 5
+                            elif "Initiating" in output:
+                                report.progress = 10
+                            elif "Scanning" in output:
+                                report.progress = 30
+                            elif "Discovered open port" in output:
+                                report.progress = min(report.progress + 5, 90)
+                            elif "NSE: Script scanning" in output:
+                                report.progress = 70
+                            elif "Nmap scan report for" in output:
+                                report.progress = 95
+                            elif "Nmap done" in output:
+                                report.progress = 100
+                            report.save()
+
+                # Wait for process to complete
                 process.wait()
 
-                # Update report with the result
-                with open('output.txt', 'r') as f:
-                    report.result = f.read()
+                # Get complete output
+                stderr = process.stderr.read()
+                
+                # Combine all output
+                complete_output = ''.join(output_buffer)
+                if stderr:
+                    complete_output += f"\nErrors:\n{stderr}"
 
-                report.status = 'completed'
-                report.progress = 100
+                report.result = complete_output
+                
+                if process.returncode == 0:
+                    report.status = 'completed'
+                else:
+                    report.status = 'failed'
+                    logging.error(f"Nmap scan failed with return code {process.returncode}")
+                    
                 report.save()
+
             except Exception as e:
+                logging.error(f"Error during scan: {str(e)}")
                 report.status = 'failed'
+                report.result = f"Error during scan: {str(e)}"
                 report.save()
 
-        thread = threading.Thread(target=run_scan, args=(report.id,))
+        # Start the scan
+        thread = threading.Thread(target=run_scan, args=(report.id,))  # Now report.id is defined
+        thread.daemon = True
         thread.start()
 
-        return JsonResponse({'scan_id': report.id})
+        return HttpResponseRedirect(reverse('progress_page', args=[report.id]))  # Now report.id is defined
 
-    # If GET request, render the form
     return render(request, 'tools/modal_nmap.html')
-
 
 @login_required
 def scan_progress(request, scan_id):
     try:
+        # Fetch the report by scan_id
         report = Report.objects.get(id=scan_id, scan_type='port_scanner')
     except Report.DoesNotExist:
         return JsonResponse({'error': 'Invalid scan ID'}, status=400)
-    
+
+    # Check the scan status and fetch terminal output if available
+    terminal_output = ""
+    if report.status in ['running', 'completed']:
+        reports_dir = os.path.join(os.path.dirname(__file__), 'reports')
+        output_path = os.path.join(reports_dir, f'output_{scan_id}.txt')
+        if os.path.exists(output_path):
+            with open(output_path, 'r') as f:
+                terminal_output = f.read()
+
+    # Return progress, status, and output
     return JsonResponse({
         'progress': report.progress,
-        'status': report.status
+        'status': report.status,
+        'terminal_output': terminal_output
     })
 
-
 @login_required
-def scan_result(request, scan_id):
+def progress_page(request, scan_id):
+    # Fetch the scan details to pass to the template
+    report = get_object_or_404(Report, id=scan_id)
+    return render(request, 'progress.html', {'scan_id': scan_id, 'report': report})
+
+def results_page(request, scan_id):
+    report = get_object_or_404(Report, id=scan_id)
+    
+    context = {
+        'report': report,
+        'raw_results': report.result,
+        'results': [],
+        'error': None
+    }
+
     try:
-        report = Report.objects.get(id=scan_id, scan_type='port_scanner')
-    except Report.DoesNotExist:
-        return JsonResponse({'error': 'Invalid scan ID'}, status=400)
+        if report.status == 'completed' and report.result:
+            parsed_results = parse_scan_results(report.result)
+            context['results'] = parsed_results
+        elif report.status == 'failed':
+            context['error'] = "Scan failed. Check raw results for details."
+        elif report.status != 'completed':
+            context['error'] = f"Scan status: {report.status}"
+    except Exception as e:
+        context['error'] = f"Error processing results: {str(e)}"
+        logging.error(f"Error in results_page: {str(e)}")
+
+    return render(request, 'tools/results.html', context)
+
+def parse_scan_results(result_data):
+    """
+    Parse Nmap scan results into a structured format.
+    """
+    if not result_data:
+        return []
+
+    parsed_results = []
+    current_port = None
+    current_host = None
     
-    if report.status != 'completed':
-        return JsonResponse({'error': 'Scan not completed yet'}, status=400)
-    
-    return JsonResponse({'result': report.result})
+    try:
+        lines = result_data.splitlines()
+        for line in lines:
+            line = line.strip()
+            
+            # Parse host information
+            if "Nmap scan report for" in line:
+                current_host = line.split("Nmap scan report for ")[-1]
+                continue
+                
+            # Parse port information
+            port_match = re.search(r'(\d+)\/(\w+)\s+(\w+)\s+(.+)', line)
+            if port_match:
+                current_port = {
+                    'port': port_match.group(1),
+                    'protocol': port_match.group(2),
+                    'state': port_match.group(3),
+                    'service': port_match.group(4),
+                    'host': current_host,
+                    'details': []
+                }
+                parsed_results.append(current_port)
+                continue
+                
+            # Parse service details
+            if current_port and line.startswith('|'):
+                current_port['details'].append(line.strip('| '))
+                
+            # Parse service version
+            version_match = re.search(r'Service Info: (.*)', line)
+            if version_match and current_port:
+                current_port['version'] = version_match.group(1)
+
+    except Exception as e:
+        logging.error(f"Error parsing Nmap results: {str(e)}")
+        return [{'error': f'Error parsing results: {str(e)}'}]
+
+    return parsed_results
+
 
 
 

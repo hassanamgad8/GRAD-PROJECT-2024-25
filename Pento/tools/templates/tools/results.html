@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Results</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #09cb4a;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #09cb4a;
+            color: white;
+        }
+        .export-buttons {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .export-buttons a {
+            text-decoration: none;
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .export-buttons a:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            background-color: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .details-cell {
+            max-width: 400px;
+            overflow-x: auto;
+        }
+        .version-info {
+            margin-top: 5px;
+            font-style: italic;
+            color: #666;
+        }
+        .raw-output {
+            background-color: #111111;
+            color: #16cf3b;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .status-completed {
+            background-color: #c8e6c9;
+            color: #2e7d32;
+        }
+        .status-failed {
+            background-color: #ffcdd2;
+            color: #c62828;
+        }
+        .status-running {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .summary-item {
+            background-color: #26bb49;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Port Scanner Results
+            <span class="status-badge status-{{ report.status }}">{{ report.status|title }}</span>
+        </h1>
+        <p>Target: {{ report.target }}</p>
+    </header>
+
+    {% if error %}
+    <div class="error-message">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <section>
+        <h2>Summary</h2>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <h3>Open Ports</h3>
+                <p>{{ results|length }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Start Time</h3>
+                <p>{{ report.created_at }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Finish Time</h3>
+                <p>{{ report.updated_at }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Duration</h3>
+                <p>{{ report.updated_at|timeuntil:report.created_at }}</p>
+            </div>
+        </div>
+    </section>
+
+    {% if results %}
+    <section>
+        <h2>Detailed Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Port</th>
+                    <th>Protocol</th>
+                    <th>State</th>
+                    <th>Service</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.port }}</td>
+                    <td>{{ result.protocol }}</td>
+                    <td>{{ result.state }}</td>
+                    <td>{{ result.service }}</td>
+                    <td class="details-cell">
+                        {% if result.details %}
+                            <ul style="margin: 0; padding-left: 20px;">
+                                {% for detail in result.details %}
+                                    <li>{{ detail }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if result.version %}
+                            <div class="version-info">{{ result.version }}</div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <div class="export-buttons">
+        <a href="/export/{{ report.id }}?format=json">Export as JSON</a>
+        <a href="/export/{{ report.id }}?format=csv">Export as CSV</a>
+    </div>
+    {% endif %}
+
+    {% if report.status == 'failed' or report.result %}
+    <section>
+        <h2>Raw Scan Output</h2>
+        <div class="raw-output">{{ raw_results }}</div>
+    </section>
+    {% endif %}
+
+    <footer>
+        <a href="/dashboard/" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #09cb4a; color: white; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
+    </footer>
+
+    {% if report.status == 'running' %}
+    <script>
+        // Auto-refresh the page every 5 seconds if the scan is still running
+        setTimeout(function() {
+            window.location.reload();
+        }, 5000);
+    </script>
+    {% endif %}
+</body>
+</html>

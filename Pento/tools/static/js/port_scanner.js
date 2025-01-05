@@ -1,140 +1,156 @@
-// port_scanner.js
+// static/js/port_scanner.js
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("port_scanner.js loaded successfully.");
+// Define the initialization function
+function initializePortScanner() {
+    const scanForm = document.getElementById("nmap-scan-form");
+    if (scanForm) {
+        scanForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-    const form = document.getElementById("nmap-scan-form");
-    const progressContainer = document.getElementById("progress-container");
-    const progressBarFill = document.getElementById("progress-bar-fill");
-    const progressText = document.getElementById("progress-text");
-    const scanResult = document.getElementById("scan-result");
-    const resultContent = document.getElementById("result-content");
+            // Collect form data
+            const formData = new FormData(scanForm);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    if (!form) {
-        console.error("Form with ID 'nmap-scan-form' not found.");
-        return;
-    }
+            // Disable the Run Scan button to prevent multiple submissions
+            const runScanButton = scanForm.querySelector('button[type="submit"]');
+            runScanButton.disabled = true;
+            runScanButton.textContent = "Running Scan...";
 
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
+            // Hide previous results if any
+            document.getElementById("scan-result-container").style.display = "none";
+            document.getElementById("scan-result").textContent = "";
+            document.getElementById("terminal").textContent = "";
 
-        // Hide previous results and reset progress bar
-        scanResult.style.display = "none";
-        progressContainer.style.display = "block";
-        progressBarFill.style.width = "0%";
-        progressBarFill.textContent = "0%";
-        progressText.textContent = "0%";
+            // Show the progress container
+            const progressContainer = document.getElementById("progress-container");
+            const terminal = document.getElementById("terminal");
+            progressContainer.style.display = "block";
 
-        // Gather form data
-        const formData = new FormData(form);
+            // Reset progress bar
+            const progressBarFill = document.getElementById("progress-bar-fill");
+            const progressText = document.getElementById("progress-text");
+            progressBarFill.style.width = "0%";
+            progressBarFill.textContent = "0%";
+            progressText.textContent = "0%";
 
-        // Get CSRF token from cookies
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        const csrftoken = getCookie('csrftoken');
-
-        // Initiate the scan via AJAX
-        fetch("/port_scanner/", {
-            method: 'POST',
-            body: formData,
-            headers: {
-                "X-CSRFToken": csrftoken,
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.scan_id) {
-                const scanId = data.scan_id;
-                console.log(`Scan initiated with ID: ${scanId}`);
-                // Start polling for progress
-                pollProgress(scanId);
-            } else if (data.error) {
-                alert(`Error: ${data.error}`);
-                progressContainer.style.display = "none";
-            }
-        })
-        .catch(error => {
-            console.error('Error initiating scan:', error);
-            alert('Error initiating scan.');
-            progressContainer.style.display = "none";
-        });
-    });
-
-    // Function to poll for scan progress
-    function pollProgress(scanId) {
-        const progressUrl = `/scan_progress/${scanId}/`;
-        const resultUrl = `/scan_result/${scanId}/`;
-
-        const intervalId = setInterval(() => {
-            fetch(progressUrl)
+            // Send the scan request via AJAX
+            fetch(scanForm.action, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                },
+                body: formData,
+            })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.error) {
-                        clearInterval(intervalId);
-                        progressText.textContent = `Error: ${data.error}`;
-                        progressBarFill.style.backgroundColor = "#f44336"; // Red color for errors
-                        progressContainer.style.display = "none";
-                        return;
-                    }
-
-                    const progress = data.progress;
-                    const status = data.status;
-
-                    progressBarFill.style.width = `${progress}%`;
-                    progressBarFill.textContent = `${progress}%`;
-                    progressText.textContent = `${progress}%`;
-
-                    if (status === 'completed') {
-                        clearInterval(intervalId);
-                        console.log(`Scan ${scanId} completed.`);
-                        // Fetch and display the result
-                        fetch(resultUrl)
-                            .then(response => response.json())
-                            .then(resultData => {
-                                if (resultData.result) {
-                                    scanResult.style.display = "block";
-                                    resultContent.textContent = resultData.result;
-                                } else if (resultData.error) {
-                                    progressText.textContent = `Error: ${resultData.error}`;
-                                    progressBarFill.style.backgroundColor = "#f44336";
-                                    progressContainer.style.display = "none";
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error fetching result:', error);
-                                progressText.textContent = 'Error fetching result.';
-                                progressContainer.style.display = "none";
-                            });
-                    } else if (status === 'failed') {
-                        clearInterval(intervalId);
-                        progressText.textContent = `Scan Failed: ${status}`;
-                        progressBarFill.style.backgroundColor = "#f44336"; // Red color for errors
+                    if (data.scan_id) {
+                        const scanId = data.scan_id;
+                        // Start polling for progress and terminal output
+                        startPolling(scanId, progressBarFill, progressText, terminal, runScanButton);
+                    } else if (data.error) {
+                        alert(`Error: ${data.error}`);
+                        runScanButton.disabled = false;
+                        runScanButton.textContent = "Run Scan";
                         progressContainer.style.display = "none";
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching progress:', error);
-                    progressText.textContent = 'Error fetching progress.';
+                    console.error("Error initiating scan:", error);
+                    alert("An error occurred while starting the scan.");
+                    runScanButton.disabled = false;
+                    runScanButton.textContent = "Run Scan";
                     progressContainer.style.display = "none";
                 });
-        }, 1000); // Poll every second
+        });
     }
-});
+}
+
+// Define the polling function
+function startPolling(scanId, progressBarFill, progressText, terminal, runScanButton) {
+    const pollInterval = setInterval(() => {
+        fetch(`/scan_progress/${scanId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Error fetching scan progress:", data.error);
+                    clearInterval(pollInterval);
+                    alert("An error occurred while fetching scan progress.");
+                    runScanButton.disabled = false;
+                    runScanButton.textContent = "Run Scan";
+                    document.getElementById("progress-container").style.display = "none";
+                    return;
+                }
+
+                // Update progress bar
+                const progress = data.progress;
+                progressBarFill.style.width = `${progress}%`;
+                progressBarFill.textContent = `${progress}%`;
+                progressText.textContent = `${progress}%`;
+
+                // Update terminal output
+                if (data.terminal_output) {
+                    terminal.textContent = data.terminal_output;
+                    terminal.scrollTop = terminal.scrollHeight; // Auto-scroll to bottom
+                }
+
+                // Check if scan is completed
+                if (data.status === 'completed') {
+                    clearInterval(pollInterval);
+                    // Hide the progress container
+                    document.getElementById("progress-container").style.display = "none";
+                    // Show the scan result container
+                    const scanResultContainer = document.getElementById("scan-result-container");
+                    scanResultContainer.style.display = "block";
+                    // Load the scan result
+                    loadResultsPage(scanId, scanResultContainer, runScanButton);
+                } else if (data.status === 'failed') {
+                    clearInterval(pollInterval);
+                    alert("Scan failed. Please check the terminal output for details.");
+                    // Re-enable the Run Scan button
+                    runScanButton.disabled = false;
+                    runScanButton.textContent = "Run Scan";
+                    // Hide the progress container
+                    document.getElementById("progress-container").style.display = "none";
+                }
+            })
+            .catch(error => {
+                console.error("Error polling scan progress:", error);
+                clearInterval(pollInterval);
+                alert("An error occurred while polling scan progress.");
+                runScanButton.disabled = false;
+                runScanButton.textContent = "Run Scan";
+                document.getElementById("progress-container").style.display = "none";
+            });
+    }, 1000); // Poll every second
+}
+
+// Define the function to load results
+function loadResultsPage(scanId, scanResultContainer, runScanButton) {
+    fetch(`/scan_result/${scanId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error("Error fetching scan result:", data.error);
+                alert("An error occurred while fetching scan results.");
+                return;
+            }
+
+            // Populate the scan result
+            const scanResult = document.getElementById("scan-result");
+            scanResult.textContent = data.result;
+
+            // Re-enable the Run Scan button
+            runScanButton.disabled = false;
+            runScanButton.textContent = "Run Scan";
+        })
+        .catch(error => {
+            console.error("Error fetching scan result:", error);
+            alert("An error occurred while fetching scan results.");
+            // Re-enable the Run Scan button
+            runScanButton.disabled = false;
+            runScanButton.textContent = "Run Scan";
+        });
+}
+
+// Initialize the port scanner when the script is loaded
+initializePortScanner();
