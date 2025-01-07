@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Unified Vulnerability Scanner</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            border-bottom: 2px solid #0be021;
+            padding-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #0be021;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #09cb4a;
+        }
+    </style>
+</head>
+<body class="website-scanner-page">
+
+    <h1>Website Vulnerability Scanner</h1>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'website_scanner' %}">
+        {% csrf_token %}
+
+        <!-- Target Input Section -->
+        <div class="section">
+            <h3>Target Input</h3>
+            <label>
+                Target URL:
+                <input type="url" name="target" placeholder="https://example.com" required>
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="include_subdomains"> Include Subdomains
+            </label>
+            <br>
+            <label>
+                Custom Scope (Regex):
+                <input type="text" name="custom_scope" placeholder=".*\\.php">
+            </label>
+            <br>
+            <label>
+                File Types:
+                <input type="text" name="file_types" placeholder=".php,.html,.asp">
+            </label>
+        </div>
+
+        <!-- Authentication Options -->
+        <div class="section">
+            <h3>Authentication</h3>
+            <label>
+                Username:
+                <input type="text" name="username">
+            </label>
+            <br>
+            <label>
+                Password:
+                <input type="password" name="password">
+            </label>
+            <br>
+            <label>
+                Session Cookie:
+                <input type="text" name="session_cookie">
+            </label>
+            <br>
+            <label>
+                Authentication Token:
+                <input type="text" name="auth_token" placeholder="Bearer ...">
+            </label>
+        </div>
+
+        <!-- Scanning Modes -->
+        <div class="section">
+            <h3>Scanning Modes</h3>
+            <label>
+                <input type="radio" name="scan_mode" value="full" checked> Full Scan
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="scan_mode" value="sql"> SQL Injection-Only
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="scan_mode" value="xss"> XSS-Only
+            </label>
+        </div>
+
+        <!-- Advanced Options -->
+        <div class="section">
+            <h3>Advanced Options</h3>
+            <div>
+                <h4>SQL Injection Options</h4>
+                <label>
+                    <input type="checkbox" name="waf_bypass"> WAF Bypass
+                </label>
+                <br>
+                <label>
+                    Injection Techniques:
+                    <select name="sql_techniques">
+                        <option value="B">Boolean-Based</option>
+                        <option value="T">Time-Based</option>
+                        <option value="E">Error-Based</option>
+                        <option value="U">Union-Based</option>
+                    </select>
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" name="auto_detect_db"> Auto-Detect Database
+                </label>
+            </div>
+
+            <div>
+                <h4>XSS Options</h4>
+                <label>
+                    <input type="checkbox" name="reflected_xss"> Reflected XSS
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" name="stored_xss"> Stored XSS
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" name="dom_xss"> DOM-Based XSS
+                </label>
+                <br>
+                <label>
+                    Payload Encoding:
+                    <select name="xss_encoding">
+                        <option value="none">None</option>
+                        <option value="base64">Base64</option>
+                        <option value="url">URL Encoding</option>
+                    </select>
+                </label>
+                <br>
+                <label>
+                    <input type="file" name="custom_payloads"> Upload Custom Payloads
+                </label>
+            </div>
+        </div>
+
+        <!-- Reporting -->
+        <div class="section">
+            <h3>Reporting</h3>
+            <label>
+                <input type="checkbox" name="real_time_logs"> Show Real-Time Logs
+            </label>
+            <br>
+            <label>
+                Export Format:
+                <select name="export_format">
+                    <option value="html">HTML</option>
+                    <option value="json">JSON</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </label>
+        </div>
+
+        <button type="submit">Start Scan</button>
+    </form>
+
+    <!-- Descriptive Table -->
+    <div class="section">
+        <h3>Option Descriptions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                    <th>When to Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Target URL</td>
+                    <td>The website to be scanned.</td>
+                    <td>Required for all scans.</td>
+                </tr>
+                <tr>
+                    <td>Include Subdomains</td>
+                    <td>Scans subdomains of the target URL.</td>
+                    <td>Use when the target includes subdomains.</td>
+                </tr>
+                <tr>
+                    <td>Custom Scope (Regex)</td>
+                    <td>Limits scans to specific URL patterns.</td>
+                    <td>Use when targeting specific file types (e.g., `.php`).</td>
+                </tr>
+                <tr>
+                    <td>File Types</td>
+                    <td>Scans specific file types like `.php`, `.html`.</td>
+                    <td>Use for focused scanning.</td>
+                </tr>
+                <tr>
+                    <td>WAF Bypass</td>
+                    <td>Attempts to bypass Web Application Firewalls.</td>
+                    <td>Use when scans are blocked by firewalls.</td>
+                </tr>
+                <tr>
+                    <td>Injection Techniques</td>
+                    <td>Specifies SQL Injection techniques (Boolean, Error, Time-Based, Union).</td>
+                    <td>Choose based on the target database or vulnerability type.</td>
+                </tr>
+                <tr>
+                    <td>Reflected XSS</td>
+                    <td>Tests for reflected XSS vulnerabilities.</td>
+                    <td>Use when inputs are immediately reflected in responses.</td>
+                </tr>
+                <tr>
+                    <td>Stored XSS</td>
+                    <td>Tests for stored XSS vulnerabilities.</td>
+                    <td>Use when inputs are stored server-side (e.g., databases).</td>
+                </tr>
+                <tr>
+                    <td>DOM-Based XSS</td>
+                    <td>Tests for client-side XSS vulnerabilities.</td>
+                    <td>Use when dynamic JavaScript manipulates the DOM.</td>
+                </tr>
+                <tr>
+                    <td>Payload Encoding</td>
+                    <td>Encodes payloads (e.g., Base64, URL encoding).</td>
+                    <td>Use to bypass basic input filters.</td>
+                </tr>
+                <tr>
+                    <td>Real-Time Logs</td>
+                    <td>Shows scan progress in real-time.</td>
+                    <td>Use for live feedback during scans.</td>
+                </tr>
+                <tr>
+                    <td>Export Format</td>
+                    <td>Specifies the format for exportable reports.</td>
+                    <td>Choose based on your reporting needs.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

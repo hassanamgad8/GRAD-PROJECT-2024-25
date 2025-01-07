@@ -1,0 +1,1 @@
+# Nmap 7.95 scan initiated Sun Jan  5 21:49:41 2025 as: nmap -oN C:\\Users\\omarz\\GRAD-PROJECT-2024-25\\GRAD-PROJECT-2024-25\\pento\\tools\\reports\\output_64.txt -p- -sU 192.168.1.1

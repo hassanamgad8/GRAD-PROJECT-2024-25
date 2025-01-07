@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Whois Lookup</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #0be021;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #09cb4a;
+        }
+        .description-section {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Whois Lookup</h2>
+    <form method="POST" action="{% url 'whois' %}">
+        {% csrf_token %}
+        <!-- Domain Name Input -->
+        <label for="domain">Domain Name:</label>
+        <input type="text" id="domain" name="domain" required>
+        <br><br>
+
+        <!-- Options -->
+        <h3>Options</h3>
+        <label>
+            <input type="checkbox" name="reverse_whois"> Include Reverse Whois Lookup
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" name="dns_records"> Include DNS Records
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" name="historical_records"> Retrieve Historical Records
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" name="geo_location"> Include Geo-location Information
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" name="domain_age"> Include Domain Age
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" name="explain_status"> Explain Domain Status Codes
+        </label>
+        <br>
+
+        <!-- Output Format -->
+        <label for="output_format">Output Format:</label>
+        <select id="output_format" name="output_format">
+            <option value="plain">Plain Text</option>
+            <option value="json">JSON</option>
+            <option value="xml">XML</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Lookup</button>
+    </form>
+
+    <!-- Option Descriptions -->
+    <div class="description-section">
+        <h3>Option Descriptions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                    <th>When to Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Include Reverse Whois Lookup</td>
+                    <td>Searches for domains registered by the same entity.</td>
+                    <td>When investigating all domains owned by a single organization or individual.</td>
+                </tr>
+                <tr>
+                    <td>Include DNS Records</td>
+                    <td>Fetches DNS records like A, MX, NS, and TXT.</td>
+                    <td>When you want to gather DNS information for further investigation.</td>
+                </tr>
+                <tr>
+                    <td>Retrieve Historical Records</td>
+                    <td>Gets past Whois records if available.</td>
+                    <td>When tracking changes in domain ownership or details over time.</td>
+                </tr>
+                <tr>
+                    <td>Include Geo-location Information</td>
+                    <td>Displays the geographical location of the domain or IP.</td>
+                    <td>When you need to identify the physical location of the entity.</td>
+                </tr>
+                <tr>
+                    <td>Include Domain Age</td>
+                    <td>Calculates the age of the domain based on the creation date.</td>
+                    <td>When assessing the credibility or maturity of the domain.</td>
+                </tr>
+                <tr>
+                    <td>Explain Domain Status Codes</td>
+                    <td>Provides detailed explanations of domain status codes.</td>
+                    <td>When you encounter unfamiliar status codes in the Whois data.</td>
+                </tr>
+                <tr>
+                    <td>Output Format</td>
+                    <td>Specifies the format of the results (Plain Text, JSON, XML).</td>
+                    <td>Choose based on how you want to process or view the data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Results Section -->
+    {% if response_data %}
+        <h3>Lookup Results</h3>
+        <pre>{{ response_data }}</pre>
+    {% endif %}
+</body>
+</html>

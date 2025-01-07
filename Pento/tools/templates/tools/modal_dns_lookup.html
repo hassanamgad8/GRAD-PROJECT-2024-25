@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DNS Lookup</title>
+</head>
+<body>
+    <h2>DNS Lookup</h2>
+    <form method="POST" action="{% url 'dns_lookup' %}">
+        {% csrf_token %}
+        <label for="domain">Domain Name:</label>
+        <input type="text" id="domain" name="domain" required>
+        <button type="submit">Lookup</button>
+    </form>
+</body>
+</html>

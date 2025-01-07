@@ -1,0 +1,29 @@
+# Nmap 7.95 scan initiated Sun Jan  5 22:03:39 2025 as: nmap -oN C:\\Users\\omarzInitiating Ping Scan at 22:03
+Scanning 41.33.62.110 [4 ports]
+Completed Ping Scan at 22:03, 0.13s Nmap scan report for host-41.33.62.110.tedata.net (41.33.62.110)
+Host is up (0.038s latency).
+Not shown: 995 filtered tcp ports (no-response)
+PORT     STATE  SERVICE
+80/tcp   open   http
+113/tcp  closed ident
+443/tcp  open   https
+2000/tcp open   cisco-sccp
+5060/tcp open   sip
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Sun Jan  5 22:03:44 2025 -- 1 IP address (1 host up) scanned in 5.58 seconds
+62.110
+Completed SYN Stealth Scan at 22:03, 4.66s elapsed (1000 total ports)
+Nmap scan report for host-41.33.62.110.tedata.net (41.33.62.110)
+Host is up (0.038s latency).
+Not shown: 995 filtered tcp ports (no-response)
+PORT     STATE  SERVICE
+80/tcp   open   http
+113/tcp  closed ident
+443/tcp  open   https
+2000/tcp open   cisco-sccp
+5060/tcp open   sip
+
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 5.58 seconds
+           Raw packets sent: 2001 (88.020KB) | Rcvd: 17 (740B)

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Domain Finder</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #0be021;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #09cb4a;
+        }
+        .description-section {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Domain Finder</h2>
+    <form method="POST" action="{% url 'domain_finder' %}">
+        {% csrf_token %}
+
+        <!-- General Target Options -->
+        <fieldset>
+            <legend>General Target Options:</legend>
+            <label for="domain">Target Domain(s):</label>
+            <input type="text" id="domain" name="domain" placeholder="e.g., example.com, 192.168.1.0/24" required>
+
+            <label>
+                ASN (Autonomous System Numbers):
+                <input type="text" name="asn" placeholder="e.g., 12345">
+            </label>
+        </fieldset>
+
+        <!-- Scope Control -->
+        <fieldset>
+            <legend>Scope Control:</legend>
+            <label><input type="checkbox" name="include_in_scope" value="true"> Limit to in-scope domains (--include)</label>
+            <label><input type="text" name="exclude_scope" placeholder="Exclude domains, e.g., test.example.com"> Exclude specific domains (--exclude)</label>
+        </fieldset>
+
+        <!-- Discovery Techniques -->
+        <fieldset>
+            <legend>Discovery Techniques:</legend>
+            <label><input type="checkbox" name="passive" value="true"> Passive Reconnaissance (--passive)</label>
+            <label><input type="checkbox" name="active" value="true"> Active Reconnaissance (-active)</label>
+            <label><input type="checkbox" name="dns_brute" value="true"> Enable DNS brute-forcing (--brute)</label>
+            <label>
+                Custom Wordlist:
+                <input type="text" name="wordlist" placeholder="Path to custom wordlist (--wordlist)">
+            </label>
+        </fieldset>
+
+        <!-- Network and Infrastructure Mapping -->
+        <fieldset>
+            <legend>Network and Infrastructure Mapping:</legend>
+            <label><input type="checkbox" name="dns_records" value="true"> Retrieve DNS records (A, CNAME, MX, TXT)</label>
+            <label><input type="checkbox" name="ip_addresses" value="true"> Map subdomains to IPs</label>
+            <label><input type="checkbox" name="asn_mapping" value="true"> Identify ASNs and CIDR ranges</label>
+        </fieldset>
+
+        <!-- Output Customization -->
+        <fieldset>
+            <legend>Output Customization:</legend>
+            <label><input type="checkbox" name="save_json" value="true"> Save Results as JSON</label>
+            <label><input type="checkbox" name="save_txt" value="true"> Save Results as TXT</label>
+            <label><input type="checkbox" name="save_graphml" value="true"> Save Results as GraphML</label>
+        </fieldset>
+
+        <!-- Advanced Options -->
+        <fieldset>
+            <legend>Advanced Options:</legend>
+            <label><input type="checkbox" name="recursive" value="true"> Enable Recursive Enumeration</label>
+            <label><input type="checkbox" name="alterations" value="true"> Enable Alterations (Typosquatting, etc.) (--alterations)</label>
+            <label>
+                Timing Control:
+                <select name="timing_template">
+                    <option value="">Default</option>
+                    <option value="-T0">-T0 (Paranoid)</option>
+                    <option value="-T5">-T5 (Aggressive)</option>
+                </select>
+            </label>
+        </fieldset>
+
+        <!-- Visualization Features -->
+        <fieldset>
+            <legend>Visualization Features:</legend>
+            <label><input type="checkbox" name="graph_view" value="true"> Display Graph View</label>
+            <label><input type="checkbox" name="tree_view" value="true"> Display Tree View</label>
+        </fieldset>
+
+        <!-- Predefined Profiles -->
+        <fieldset>
+            <legend>Profiles and Predefined Modes:</legend>
+            <label><input type="radio" name="profile" value="quick"> Quick Scan (Passive enumeration only)</label>
+            <label><input type="radio" name="profile" value="comprehensive"> Comprehensive Scan (Passive + Active)</label>
+            <label><input type="radio" name="profile" value="brute_force"> Brute Force Mode (Focus on brute-forcing)</label>
+            <label><input type="radio" name="profile" value="stealth"> Stealth Mode (Minimal traffic)</label>
+        </fieldset>
+
+        <button type="submit">start Scan</button>
+    </form>
+
+    <!-- Table of Option Descriptions -->
+    <div class="description-section">
+        <h3>Domain Finder Options Description</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Target Domain(s)</td>
+                    <td>Input one or more domains, CIDR ranges, or ASNs for scanning.</td>
+                </tr>
+                <tr>
+                    <td>--include</td>
+                    <td>Limit results to in-scope domains.</td>
+                </tr>
+                <tr>
+                    <td>--exclude</td>
+                    <td>Exclude specific subdomains or domains from the scan.</td>
+                </tr>
+                <tr>
+                    <td>--passive</td>
+                    <td>Use only passive sources for stealth reconnaissance.</td>
+                </tr>
+                <tr>
+                    <td>-active</td>
+                    <td>Enable active techniques like DNS brute-forcing and reverse lookups.</td>
+                </tr>
+                <tr>
+                    <td>--brute</td>
+                    <td>Enable brute-force subdomain enumeration.</td>
+                </tr>
+                <tr>
+                    <td>--wordlist</td>
+                    <td>Use a custom wordlist for brute-forcing subdomains.</td>
+                </tr>
+                <tr>
+                    <td>DNS Records</td>
+                    <td>Retrieve DNS records such as A, CNAME, MX, and TXT.</td>
+                </tr>
+                <tr>
+                    <td>IP Addresses</td>
+                    <td>Map subdomains to their corresponding IP addresses.</td>
+                </tr>
+                <tr>
+                    <td>ASN and CIDR</td>
+                    <td>Identify associated ASNs and CIDR ranges for domains.</td>
+                </tr>
+                <tr>
+                    <td>Recursive Enumeration</td>
+                    <td>Discover subdomains of already-discovered subdomains.</td>
+                </tr>
+                <tr>
+                    <td>--alterations</td>
+                    <td>Enable typosquatting and domain permutations.</td>
+                </tr>
+                <tr>
+                    <td>-T0 to -T5</td>
+                    <td>Timing template to adjust scan speed and stealthiness.</td>
+                </tr>
+                <tr>
+                    <td>Graph View</td>
+                    <td>Display subdomain relationships in a graph view.</td>
+                </tr>
+                <tr>
+                    <td>Tree View</td>
+                    <td>Display subdomain relationships in a tree view.</td>
+                </tr>
+                <tr>
+                    <td>Profiles</td>
+                    <td>Predefined scan modes such as Quick Scan, Comprehensive Scan, Brute Force Mode, and Stealth Mode.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

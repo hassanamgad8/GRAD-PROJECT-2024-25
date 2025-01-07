@@ -1,0 +1,55 @@
+# Nmap 7.95 scan initiated Sun Jan  5 22:28:23 2025 as: nmap -oN C:\\Users\\omarzNSE: Loaded 126 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 22:28
+Completed NSE at 22:28, 0Nmap scan report for csp1.zte.com.cn (192.168.1.1)
+Host is up (0.068s latency).
+Not shown: 994 closed tcp ports (reset)
+PORT      STATE    SERVICE
+22/tcp    filtered ssh
+23/tcp    filtered telnet
+53/tcp    open     domain
+| dns-nsid: 
+|_  bind.version: 9.11.4-P2-RedHat-9.11.4-26.P2.el7_9.10
+80/tcp    open     http
+|_http-favicon: Unknown favicon MD5: 5E966BB5036DC2624A0187A91E59D3DD
+|_http-title: &#90;&#88;&#72;&#78;&#32;&#72;&#49;&#54;&#56;&#78;&#32;&#86;&#...
+| http-methods: 
+|_  Supported Methods: GET HEAD POST
+443/tcp   open     https
+| http-methods: 
+|_  Supported Methods: GET HEAD
+|_http-title: 400 Bad Request
+52869/tcp open     unknown
+MAC Address: E0:19:54:66:0A:20 (zte)
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Sun Jan  5 22:28:50 2025 -Completed NSE at 22:28, 0.00s elapsed
+Nmap scan report for csp1.zte.com.cn (192.168.1.1)
+Host is up (0.068s latency).
+Not shown: 994 closed tcp ports (reset)
+PORT      STATE    SERVICE
+22/tcp    filtered ssh
+23/tcp    filtered telnet
+53/tcp    open     domain
+| dns-nsid: 
+|_  bind.version: 9.11.4-P2-RedHat-9.11.4-26.P2.el7_9.10
+80/tcp    open     http
+|_http-favicon: Unknown favicon MD5: 5E966BB5036DC2624A0187A91E59D3DD
+|_http-title: &#90;&#88;&#72;&#78;&#32;&#72;&#49;&#54;&#56;&#78;&#32;&#86;&#...
+| http-methods: 
+|_  Supported Methods: GET HEAD POST
+443/tcp   open     https
+| http-methods: 
+|_  Supported Methods: GET HEAD
+|_http-title: 400 Bad Request
+52869/tcp open     unknown
+MAC Address: E0:19:54:66:0A:20 (zte)
+
+NSE: Script Post-scanning.
+Initiating NSE at 22:28
+Completed NSE at 22:28, 0.00s elapsed
+Initiating NSE at 22:28
+Completed NSE at 22:28, 0.00s elapsed
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 26.99 seconds
+           Raw packets sent: 1008 (44.336KB) | Rcvd: 1008 (40.480KB)

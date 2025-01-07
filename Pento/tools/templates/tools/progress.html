@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Progress</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        #progress-bar {
+            width: 100%;
+            background-color: #ddd;
+        }
+        #progress-bar-fill {
+            width: 0%;
+            height: 30px;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+        .terminal {
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 20px;
+            margin-top: 20px;
+            height: 300px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h2>Scan Progress</h2>
+    <div id="progress-bar">
+        <div id="progress-bar-fill">0%</div>
+    </div>
+    <div class="terminal" id="terminal-output">Initializing scan...</div>
+
+    <script>
+        const scanId = "{{ scan_id }}";
+        console.log("Scan ID:", scanId);
+
+        function fetchProgress(scanId) {
+            fetch(`/scan_progress/${scanId}/`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
+
+                    // Update progress bar
+                    const progressBarFill = document.getElementById("progress-bar-fill");
+                    progressBarFill.style.width = `${data.progress}%`;
+                    progressBarFill.textContent = `${data.progress}%`;
+
+                    // Update terminal output
+                    const terminalOutput = document.getElementById("terminal-output");
+                    terminalOutput.textContent = data.terminal_output;
+
+                    // If scan is completed, redirect to results page
+                    if (data.status === "completed") {
+                        console.log("Scan completed! Redirecting to results page...");
+                        clearInterval(progressInterval); // Stop the interval
+                        window.location.href = `/results/${scanId}/`; // Redirect
+                    } else if (data.status === "failed") {
+                        clearInterval(progressInterval);
+                        terminal.textContent += "\nScan failed.";
+                    }
+                })
+                .catch((error) => console.error("Error fetching scan progress:", error));
+        }
+
+        // Poll the progress endpoint every 2 seconds
+        const progressInterval = setInterval(() => fetchProgress(scanId), 2000);
+        fetchProgress(scanId); // Initial call
+    </script>
+</body>
+</html>

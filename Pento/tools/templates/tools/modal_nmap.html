@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Port Advanced Scanner</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #0be021;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #09cb4a;
+        }
+        .description-section {
+            margin-top: 40px;
+        }
+        #progress-container {
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #ddd;
+        }
+        #progress-bar-fill {
+            width: 0%;
+            height: 30px;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+        #scan-result {
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <h2>Advanced Port Scanner</h2>
+    <form id="nmap-scan-form" method="POST" action="{% url 'port_scanner' %}">
+                {% csrf_token %}
+
+        <!-- Target Input -->
+        <label for="target">Target(s):</label>
+        <input type="text" id="target" name="target" placeholder="e.g., 192.168.1.1, example.com, 192.168.1.0/24" required>
+
+        <!-- Host Discovery -->
+        <fieldset>
+            <legend>Host Discovery:</legend>
+            <label><input type="checkbox" name="disable_ping" value="-Pn"> Disable Ping Scan (-Pn)</label>
+            <label><input type="checkbox" name="enable_ping" value="-sn"> Enable Ping Scan (-sn)</label>
+        </fieldset>
+
+        <!-- DNS Resolution -->
+        <fieldset>
+            <legend>DNS Resolution:</legend>
+            <label><input type="radio" name="dns_resolution" value="-n"> Disable DNS Resolution (-n)</label>
+            <label><input type="radio" name="dns_resolution" value="-R"> Force DNS Resolution (-R)</label>
+        </fieldset>
+
+        <!-- Port Scanning -->
+        <fieldset>
+            <legend>Port Scans:</legend>
+            <label><input type="radio" name="port_scan" value="-F"> Quick Scan (top 1000 ports, -F)</label>
+            <label><input type="radio" name="port_scan" value="-p-"> Full Port Scan (-p-)</label>
+            <label>
+                Custom Port Range:
+                <input type="text" name="custom_ports" placeholder="e.g., 1-65535">
+            </label>
+        </fieldset>
+
+        <!-- Scan Techniques -->
+        <fieldset>
+            <legend>Scan Techniques:</legend>
+            <label><input type="radio" name="scan_technique" value="-sT"> TCP Connect (-sT)</label>
+            <label><input type="radio" name="scan_technique" value="-sS"> SYN Scan (-sS)</label>
+            <label><input type="radio" name="scan_technique" value="-sU"> UDP Scan (-sU)</label>
+            <label><input type="radio" name="scan_technique" value="-sN"> Stealth Scan (-sN)</label>
+            <label><input type="radio" name="scan_technique" value="-sF"> FIN Scan (-sF)</label>
+        </fieldset>
+
+        <!-- Service and OS Detection -->
+        <fieldset>
+            <legend>Service and OS Detection:</legend>
+            <label><input type="checkbox" name="enable_version" value="-sV"> Service Version Detection (-sV)</label>
+            <label><input type="checkbox" name="enable_os" value="-O"> Enable OS Detection (-O)</label>
+            <label><input type="checkbox" name="enable_aggressive" value="-A"> Aggressive Scan (-A)</label>
+        </fieldset>
+
+        <!-- Advanced Scanning Options -->
+        <fieldset>
+            <legend>Advanced Options:</legend>
+            <label>Timing Template:
+                <select name="timing_template">
+                    <option value="">Default</option>
+                    <option value="-T0">-T0 (Paranoid)</option>
+                    <option value="-T5">-T5 (Aggressive)</option>
+                </select>
+            </label>
+            <label><input type="checkbox" name="fragment_packets" value="-f"> Fragment Packets (-f)</label>
+            <label><input type="checkbox" name="randomize_hosts" value="--randomize-hosts"> Randomize Hosts (--randomize-hosts)</label>
+            <label>Use Decoys:
+                <input type="text" name="decoys" placeholder="e.g., RND:10">
+            </label>
+            <label>Script:
+                <input type="text" name="nmap_scripts" placeholder="e.g., default or vuln">
+            </label>
+        </fieldset>
+
+        <!-- Output Options -->
+        <fieldset>
+            <legend>Output Options:</legend>
+            <label><input type="checkbox" name="save_txt" value="-oN output.txt"> Save as TXT</label>
+            <label><input type="checkbox" name="save_xml" value="-oX output.xml"> Save as XML</label>
+        </fieldset>
+
+        <button type="submit">Run  Scan</button>
+    </form>
+    <!-- Progress Bar Container -->
+    <div id="progress-container">
+        <h3>Scan in Progress</h3>
+        <div id="progress-bar">
+            <div id="progress-bar-fill">0%</div>
+        </div>
+        <p id="progress-text">0%</p>
+    </div>
+    <!-- Scan Result Container -->
+    <div id="scan-result">
+        <h3>Scan Results</h3>
+        <pre id="result-content"></pre>
+    </div>
+
+
+    <!-- Table of Option Descriptions -->
+    <div class="description-section">
+        <h3>Port Scanner Options Description</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>-Pn</td>
+                    <td>Disables host discovery; assumes all hosts are up.</td>
+                </tr>
+                <tr>
+                    <td>-sn</td>
+                    <td>Ping scan; checks which hosts are online without scanning ports.</td>
+                </tr>
+                <tr>
+                    <td>-n</td>
+                    <td>Disables DNS resolution for faster scans.</td>
+                </tr>
+                <tr>
+                    <td>-R</td>
+                    <td>Forces DNS resolution even for downed hosts.</td>
+                </tr>
+                <tr>
+                    <td>-F</td>
+                    <td>Performs a quick scan on the top 1000 commonly used ports.</td>
+                </tr>
+                <tr>
+                    <td>-p-</td>
+                    <td>Scans all 65535 ports.</td>
+                </tr>
+                <tr>
+                    <td>-sT</td>
+                    <td>Performs a TCP connect scan.</td>
+                </tr>
+                <tr>
+                    <td>-sS</td>
+                    <td>Performs a SYN scan, also known as stealth scan.</td>
+                </tr>
+                <tr>
+                    <td>-sU</td>
+                    <td>Performs a UDP scan.</td>
+                </tr>
+                <tr>
+                    <td>-sN</td>
+                    <td>Stealth scan; no TCP flags set.</td>
+                </tr>
+                <tr>
+                    <td>-sF</td>
+                    <td>FIN scan; only the FIN TCP flag is set.</td>
+                </tr>
+                <tr>
+                    <td>-sV</td>
+                    <td>Detects version information of services.</td>
+                </tr>
+                <tr>
+                    <td>-O</td>
+                    <td>Detects the operating system of the target.</td>
+                </tr>
+                <tr>
+                    <td>-A</td>
+                    <td>Combines OS detection, version detection, and traceroute.</td>
+                </tr>
+                <tr>
+                    <td>-T0 to -T5</td>
+                    <td>Specifies the timing template (from slowest to fastest).</td>
+                </tr>
+                <tr>
+                    <td>-f</td>
+                    <td>Fragments packets to evade firewalls.</td>
+                </tr>
+                <tr>
+                    <td>--randomize-hosts</td>
+                    <td>Randomizes the scan order of hosts.</td>
+                </tr>
+                <tr>
+                    <td>-oN, -oX</td>
+                    <td>Specifies output formats (Normal and XML).</td>
+                </tr>
+                <tr>
+                    <td>--script</td>
+                    <td>Specifies scripts for advanced scanning.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Include port_scanner.js -->
+    <script src="{% static 'js/script.js' %}"></script>
+
+  </body>
+</html>

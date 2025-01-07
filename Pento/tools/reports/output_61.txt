@@ -1,0 +1,2 @@
+-sL and -sn (skip port scan) are not valid with any other scan types
+QUITTING!

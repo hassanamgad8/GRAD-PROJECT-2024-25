@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Reports</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Scan Reports</h1>
+
+    <!-- Filter Form -->
+    <form method="GET" action="{% url 'reports' %}">
+        <label for="scan_type">Filter by Scan Type:</label>
+        <select name="scan_type" id="scan_type">
+            <option value="">All</option>
+            <option value="Nmap">Nmap</option>
+            <option value="Whois">Whois</option>
+            <option value="Sublist3r">Sublist3r</option>
+            <option value="SQLMap">SQLMap</option>
+            <option value="XSS">XSS</option>
+            <option value="ZAP">OWASP ZAP</option>
+            <option value="DNS Lookup">DNS Lookup</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+
+    <!-- Reports Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Scan Type</th>
+                <th>Target</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.scan_type }}</td>
+                <td>{{ report.target }}</td>
+                <td>{{ report.timestamp }}</td>
+                <td>
+                    <button onclick="viewReport('{{ report.id }}')">View</button>
+                    <a href="{% url 'download_report' report.id %}" download>Download</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if reports.has_previous %}
+            <a href="?page={{ reports.previous_page_number }}">&laquo; Previous</a>
+        {% endif %}
+
+        <span>Page {{ reports.number }} of {{ reports.paginator.num_pages }}</span>
+
+        {% if reports.has_next %}
+            <a href="?page={{ reports.next_page_number }}">Next &raquo;</a>
+        {% endif %}
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" style="display: none;">
+        <div id="report-content"></div>
+        <button onclick="closeModal()">Close</button>
+    </div>
+
+    <script>
+        async function viewReport(reportId) {
+            const response = await fetch(`/reports/${reportId}/`);
+            const data = await response.json();
+            document.getElementById('report-content').innerText = data.result;
+            document.getElementById('report-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
