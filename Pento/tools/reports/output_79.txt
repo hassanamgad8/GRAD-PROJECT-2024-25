@@ -1,0 +1,22 @@
+# Nmap 7.95 scan initiated Wed Jan 22 20:00:07 2025 as: nmap -oN C:\\Users\\omarzInitiating Ping Scan at 20:00
+Scanning 192.168.1.1 [4 ports]
+Completed Ping Scan at 20:00, 0.15s Nmap scan report for 192.168.1.1
+Host is up (0.038s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT   STATE SERVICE
+21/tcp open  ftp
+25/tcp open  smtp
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Wed Jan 22 20:00:13 2025 -- 1 IP address (1 host up) scanned in 6.47 seconds
+ted SYN Stealth Scan at 20:00, 5.35s elapsed (1000 total ports)
+Nmap scan report for 192.168.1.1
+Host is up (0.038s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT   STATE SERVICE
+21/tcp open  ftp
+25/tcp open  smtp
+
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 6.47 seconds
+           Raw packets sent: 2006 (88.224KB) | Rcvd: 23 (944B)

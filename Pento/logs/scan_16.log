@@ -1,0 +1,26 @@
+2025-01-25 12:43:47,187 - INFO - Starting scan for target: http://testphp.vulnweb.com/
+2025-01-25 12:43:47,188 - INFO - Scan mode: full
+2025-01-25 12:48:47,210 - ERROR - SQL Injection Scan Error: Command '['sqlmap', '-u', 'http://testphp.vulnweb.com/', '--batch', '--forms', '--flush-session', '--fresh-queries', '--crawl=2', '--crawl-depth=5', '--level=5', '--risk=3', '--technique=BEUST', '--timeout=300', '--max-time=600']' timed out after 300 seconds
+XSS Scan Result: {'status': 'success', 'output': '[!!] Unable to connect to the target. \x1b[0m\n[!!] Unable to connect to the target. \x1b[0m\n\x1b[97m[~]\x1b[0m Checking for DOM vulnerabilities \x1b[0m\n\x1b[97m[~]\x1b[0m Checking for DOM vulnerabilities \x1b[0m\n\x1b[91m[-]\x1b[0m No parameters to test. \x1b[0m\n\x1b[91m[-]\x1b[0m No parameters to test. \x1b[0m\n'}
+2025-01-25 12:49:04,374 - ERROR - Scan failed: [WinError 2] The system cannot find the file specified
+2025-01-25 12:49:04,382 - ERROR - Traceback (most recent call last):
+  File "C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\pento\tools\views.py", line 875, in run_scan
+    results['ssl_certificate'] = check_ssl_certificate(target)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\pento\tools\views.py", line 943, in check_ssl_certificate
+    output = subprocess.check_output(command, stderr=subprocess.STDOUT, text=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+2025-01-25 12:56:28,517 - INFO - C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\Pento\tools\views.py changed, reloading.

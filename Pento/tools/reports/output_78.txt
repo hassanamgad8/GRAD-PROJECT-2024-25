@@ -1,0 +1,54 @@
+# Nmap 7.95 scan initiated Wed Jan  8 23:27:18 2025 as: nmap -oN C:\\Users\\omarzNSE: Loaded 126 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 23:27
+Completed NSE at 23:27, 0.0Nmap scan report for edge-star-mini-shv-01-hbe1.facebook.com (102.132.97.35)
+Host is up (0.12s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+25/tcp  open  smtp
+|_smtp-commands: Couldn't establish connection on port 25
+80/tcp  open  http
+|_http-title: Did not follow redirect to https://edge-star-mini-shv-01-hbe1.facebook.com/
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+443/tcp open  https
+| ssl-cert: Subject: commonName=*.facebook.com/organizationName=Meta Platforms, Inc./stateOrProvinceName=California/countryName=US
+| Subject Alternative Name: DNS:*.facebook.com, DNS:*.facebook.net, DNS:*.fbcdn.net, DNS:*.fbsbx.com, DNS:*.m.facebook.com, DNS:*.messenger.com, DNS:*.xx.fbcdn.net, DNS:*.xInitiating NSE at 23:28
+Completed NSE at 23:28, 0.00s elapsed
+Nmap scan report for edge-star-mini-shv-01-hbe1.facebook.com (102.132.97.35)
+Host is up (0.12s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+25/tcp  open  smtp
+|_smtp-commands: Couldn't establish connection on port 25
+80/tcp  open  http
+|_http-title: Did not follow redirect to https://edge-star-mini-shv-01-hbe1.facebook.com/
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+443/tcp open  https
+| ssl-cert: Subject: commonName=*.facebook.com/organizationName=Meta Platforms, Inc./stateOrProvinceName=California/countryName=US
+| Subject Alternative Name: DNS:*.facebook.com, DNS:*.facebook.net, DNS:*.fbcdn.net, DNS:*.fbsbx.com, DNS:*.m.facebook.com, DNS:*.messenger.com, DNS:*.xx.fbcdn.net, DNS:*.xy.fbcdn.net, DNS:*.xz.fbcdn.net, DNS:facebook.com, DNS:messenger.com
+| Issuer: commonName=DigiCert SHA2 High Assurance Server CA/organizationName=DigiCert Inc/countryName=US
+| Public Key type: ec
+| Public Key bits: 256
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2024-10-18T00:00:00
+| Not valid after:  2025-01-16T23:59:59
+| MD5:   c9dd:a941:9e99:b461:6241:c57c:0385:9d89
+|_SHA-1: 9f3b:e303:4204:8467:5428:b4e7:a298:485f:9ffc:71b2
+|_ssl-date: TLS randomness does not represent time
+|_http-favicon: Unknown favicon MD5: 3E764F0F737767B30A692FAB1DE3CE49
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+| tls-alpn: 
+|   h2
+|_  http/1.1
+
+NSE: Script Post-scanning.
+Initiating NSE at 23:28
+Completed NSE at 23:28, 0.00s elapsed
+Initiating NSE at 23:28
+Completed NSE at 23:28, 0.00s elapsed
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 58.80 seconds
+           Raw packets sent: 2014 (88.540KB) | Rcvd: 1596 (63.904KB)

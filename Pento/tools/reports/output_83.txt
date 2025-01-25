@@ -1,0 +1,72 @@
+# Nmap 7.95 scan initiated Wed Jan 22 20:53:29 2025 as: nmap -oN C:\\Users\\omarzInitiating Ping Scan at 20:53
+Scanning 44.228.249.3 [4 ports]
+Completed Ping Scan at 20:53, 0.17s Increasing send delay for 44.228.249.3 from 0 to 5 due to 11 out of 15 dropped probes since last increase.
+Increasing send delay for 44.228.249.3 from 5 to 10 due to 11 out of 16 dropped probes since last increase.
+Increasing send delay for 44.228.249.3 from 160 to 320 due to 23 out of 76 dropped probes since last increase.
+Warning: 44.228.249.3 giving up on port because retransmission cap hit (10).
+adjust_timeouts2: packet supposedly had rtt of 8342000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8342000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8607000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8607000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8829000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8829000 microseconds.  Ignoring time.
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+adjust_timeouts2: packet supposedly had rtt of 9094000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 9094000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8080000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 8080000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 9095000 microseconds.  Ignoring time.
+adjust_timeouts2: packet supposedly had rtt of 9095000 microseconds.  Ignoring time.
+Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+Host is up (5.2s latency).
+Not shown: 504 filtered tcp ports (no-response), 493 closed tcp ports (reset)
+PORT   STATE SERVICE
+21/tcp open  ftp
+25/tcp open  smtp
+80/tcp open  http
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Wed Jan 22 22:51:25 2025 -- 1 IP address (1 host up) scanned in 7076.54 seconds
+; ETC: 21:28 (0:29:52 remaining)
+SYN Stealth Scan Timing: About 15.87% done; ETC: 21:31 (0:31:59 remaining)
+SYN Stealth Scan Timing: About 16.12% done; ETC: 21:34 (0:34:00 remaining)
+SYN Stealth Scan Timing: About 16.38% done; ETC: 21:36 (0:36:09 remaining)
+SYN Stealth Scan Timing: About 16.68% done; ETC: 21:39 (0:38:22 remaining)
+SYN Stealth Scan Timing: About 17.03% done; ETC: 21:42 (0:40:51 remaining)
+SYN Stealth Scan Timing: About 17.39% done; ETC: 21:46 (0:43:23 remaining)
+SYN Stealth Scan Timing: About 17.81% done; ETC: 21:49 (0:46:04 remaining)
+SYN Stealth Scan Timing: About 18.28% done; ETC: 21:53 (0:48:52 remaining)
+SYN Stealth Scan Timing: About 18.83% done; ETC: 21:57 (0:51:57 remaining)
+SYN Stealth Scan Timing: About 19.45% done; ETC: 22:01 (0:55:10 remaining)
+SYN Stealth Scan Timing: About 20.19% done; ETC: 22:06 (0:58:38 remaining)
+SYN Stealth Scan Timing: About 21.10% done; ETC: 22:12 (1:02:23 remaining)
+SYN Stealth Scan Timing: About 22.20% done; ETC: 22:18 (1:06:21 remaining)
+SYN Stealth Scan Timing: About 23.65% done; ETC: 22:26 (1:10:41 remaining)
+SYN Stealth Scan Timing: About 27.44% done; ETC: 22:37 (1:15:20 remaining)
+SYN Stealth Scan Timing: About 51.14% done; ETC: 23:17 (1:10:07 remaining)
+SYN Stealth Scan Timing: About 58.31% done; ETC: 23:24 (1:02:55 remaining)
+SYN Stealth Scan Timing: About 64.54% done; ETC: 23:29 (0:55:21 remaining)
+SYN Stealth Scan Timing: About 70.30% done; ETC: 23:31 (0:46:57 remaining)
+SYN Stealth Scan Timing: About 74.40% done; ETC: 23:24 (0:38:37 remaining)
+SYN Stealth Scan Timing: About 78.50% done; ETC: 23:17 (0:30:56 remaining)
+SYN Stealth Scan Timing: About 83.00% done; ETC: 23:10 (0:23:17 remaining)
+SYN Stealth Scan Timing: About 87.70% done; ETC: 23:04 (0:16:03 remaining)
+SYN Stealth Scan Timing: About 92.50% done; ETC: 22:58 (0:09:21 remaining)
+SYN Stealth Scan Timing: About 97.59% done; ETC: 22:52 (0:02:52 remaining)
+Completed SYN Stealth Scan at 22:51, 7075.53s elapsed (1000 total ports)
+Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+Host is up (5.2s latency).
+Not shown: 504 filtered tcp ports (no-response), 493 closed tcp ports (reset)
+PORT   STATE SERVICE
+21/tcp open  ftp
+25/tcp open  smtp
+80/tcp open  http
+
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 7076.54 seconds
+           Raw packets sent: 7473 (326.408KB) | Rcvd: 7156 (286.312KB)

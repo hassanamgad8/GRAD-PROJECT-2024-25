@@ -1,0 +1,32 @@
+# Nmap 7.95 scan initiated Sat Jan 25 08:10:34 2025 as: nmap -oN C:\\Users\\omarzInitiating ARP Ping Scan at 08:10
+Scanning 192.168.1.1 [1 port]
+Completed ARP Ping Scan at 08:10,Nmap scan report for csp1.zte.com.cn (192.168.1.1)
+Host is up (0.0053s latency).
+Not shown: 994 closed tcp ports (reset)
+PORT      STATE    SERVICE
+22/tcp    filtered ssh
+23/tcp    filtered telnet
+53/tcp    open     domain
+80/tcp    open     http
+443/tcp   open     https
+52869/tcp open     unknown
+MAC Address: E0:19:54:66:0A:20 (zte)
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Sat Jan 25 08:10:37 2025 -- 1 IP address (1 host up) scanned in 3.30 seconds
+orts)
+Nmap scan report for csp1.zte.com.cn (192.168.1.1)
+Host is up (0.0053s latency).
+Not shown: 994 closed tcp ports (reset)
+PORT      STATE    SERVICE
+22/tcp    filtered ssh
+23/tcp    filtered telnet
+53/tcp    open     domain
+80/tcp    open     http
+443/tcp   open     https
+52869/tcp open     unknown
+MAC Address: E0:19:54:66:0A:20 (zte)
+
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 3.30 seconds
+           Raw packets sent: 1003 (44.116KB) | Rcvd: 1002 (40.096KB)

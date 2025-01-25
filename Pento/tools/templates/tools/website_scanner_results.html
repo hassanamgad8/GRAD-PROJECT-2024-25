@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Website Scanner Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #0be021;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #09cb4a;
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Scanner Results</h1>
+    <div>
+        <h3>Scan Summary</h3>
+        <p>Status: {{ report.status }}</p>
+        <p>Target: {{ report.target }}</p>
+        <p>Scan Type: {{ report.scan_type }}</p>
+    </div>
+
+    <div>
+        <h3>Findings</h3>
+        {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.type }}</td>
+                    <td>{{ result.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No vulnerabilities found.</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <h3>Raw Output</h3>
+        <pre>{{ raw_results }}</pre>
+    </div>
+
+    <a href="{% url 'dashboard' %}">Return to Dashboard</a>
+</body>
+</html>

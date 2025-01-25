@@ -1,0 +1,26 @@
+# Nmap 7.95 scan initiated Wed Jan 22 23:05:49 2025 as: nmap -oN C:\\Users\\omarzInitiating Ping Scan at 23:05
+Scanning 44.228.249.3 [4 ports]
+Completed Ping Scan at 23:05, 0.12s Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+Host is up (0.062s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT   STATE SERVICE
+21/tcp open  ftp
+25/tcp open  smtp
+80/tcp open  http
+
+Read data files from: C:\Program Files (x86)\Nmap
+# Nmap done at Wed Jan 22 23:06:07 2025 -- 1 IP address (1 host up) scanned in 18.19 seconds
+tcp on 44.228.249.3
+Discovered open port 80/tcp on 44.228.249.3
+Completed SYN Stealth Scan at 23:06, 17.28s elapsed (1000 total ports)
+Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+Host is up (0.062s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT   STATE SERVICE
+21/tcp open  ftp
+25/tcp open  smtp
+80/tcp open  http
+
+Read data files from: C:\Program Files (x86)\Nmap
+Nmap done: 1 IP address (1 host up) scanned in 18.19 seconds
+           Raw packets sent: 3011 (132.412KB) | Rcvd: 1619 (64.820KB)

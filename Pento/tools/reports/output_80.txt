@@ -1,0 +1,7 @@
+# Nmap 7.95 scan initiated Wed Jan 22 20:49:50 2025 as: nmap -oN C:\\Users\\omarzRead data files from: C:\Program Files (x86)\Nmap
+Nmap done: 0 IP addresses (0 hosts up) scanned in 0.34 seconds
+           Raw packets sent: 0 (0B) | Rcvd: 0 (0B)
+p://testphp.vulnweb.com/"
+Read data files from: C:\Program Files (x86)\Nmap
+WARNING: No targets were specified, so 0 hosts scanned.
+# Nmap done at Wed Jan 22 20:49:50 2025 -- 0 IP addresses (0 hosts up) scanned in 0.34 seconds

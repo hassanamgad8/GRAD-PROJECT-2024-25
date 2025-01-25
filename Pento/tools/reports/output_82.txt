@@ -1,0 +1,7 @@
+# Nmap 7.95 scan initiated Wed Jan 22 20:52:37 2025 as: nmap -oN C:\\Users\\omarzInitiating Ping Scan at 20:52
+Scanning 44.228.249.3 [4 ports]
+Completed Ping Scan at 20:52, 3.14s Nmap scan report for 44.2Nmap scan report for 44.228.249.3 [host down]
+Read data files from: C:\Program Files (x86)\Nmap
+Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+Nmap done: 1 IP address (0 hosts up) scanned in 4.00 seconds
+           Raw packets sent: 8 (304B) | Rcvd: 0 (0B)

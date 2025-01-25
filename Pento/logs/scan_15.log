@@ -1,0 +1,26 @@
+2025-01-25 12:38:02,759 - INFO - Starting scan for target: http://testphp.vulnweb.com/
+2025-01-25 12:38:02,760 - INFO - Scan mode: full
+SQL Scan Result: {'status': 'error', 'output': '\'"C:\\Program Files\\sqlmap"\' is not recognized as an internal or external command,\noperable program or batch file.\n'}
+XSS Scan Result: {'status': 'error', 'output': '\'"C:\\Program Files\\xsstrike"\' is not recognized as an internal or external command,\noperable program or batch file.\n'}
+2025-01-25 12:38:08,595 - ERROR - Scan failed: [WinError 2] The system cannot find the file specified
+2025-01-25 12:38:08,601 - ERROR - Traceback (most recent call last):
+  File "C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\pento\tools\views.py", line 880, in run_scan
+    results['ssl_certificate'] = check_ssl_certificate(target)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\pento\tools\views.py", line 948, in check_ssl_certificate
+    output = subprocess.check_output(command, stderr=subprocess.STDOUT, text=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+2025-01-25 12:43:29,447 - INFO - C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\Pento\tools\views.py changed, reloading.

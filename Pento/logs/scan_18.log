@@ -1,0 +1,2 @@
+2025-01-25 13:41:02,977 - INFO - Starting scan for target: http://testphp.vulnweb.com/
+2025-01-25 13:41:02,977 - INFO - Starting SQL Injection scan

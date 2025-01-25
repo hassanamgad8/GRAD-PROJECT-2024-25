@@ -156,3 +156,17 @@ class Finding(models.Model):
 
     def __str__(self):
         return f"{self.description} - {self.risk_level}"
+
+
+
+class ReportWebsiteScanner(models.Model):
+    scan_type = models.CharField(max_length=100)
+    target = models.URLField()
+    status = models.CharField(max_length=100)
+    progress = models.IntegerField(default=0)
+    result = models.TextField(blank=True, null=True)
+    created_by = models.CharField(max_length=100)
+    created_at = models.DateTimeField(default=now)  # Use this for timestamps
+
+    def __str__(self):
+        return f"{self.scan_type} - {self.target} ({self.created_at.strftime('%Y-%m-%d %H:%M:%S')})"

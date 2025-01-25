@@ -1,0 +1,20 @@
+SQL Injection: SQL Injection Scan Error: Command '['python', 'C:\\Users\\omarz\\GRAD-PROJECT-2024-25\\GRAD-PROJECT-2024-25\\Pento\\sqlmap-dev\\sqlmap.py', '-u', 'https://www.ejust.edu.eg/', '--batch', '--forms', '--flush-session', '--fresh-queries', '--crawl=2', '--crawl-depth=5', '--level=5', '--risk=3', '--technique=BEUST', '--timeout=300', '--max-time=600']' timed out after 300 seconds
+XSS Vulnerability: {'status': 'success', 'output': "Requirement already satisfied: fuzzywuzzy in c:\\users\\omarz\\grad-project-2024-25\\grad-project-2024-25\\.venv\\lib\\site-packages (0.18.0)\n\n\tXSStrike v3.1.5\n\n fuzzywuzzy isn't installed, installing now.\n fuzzywuzzy has been installed, restart XSStrike.\n"}
+HTTP Security Headers: Missing Headers: Strict-Transport-Security, Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, Referrer-Policy
+CMS Identification: Error: Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\.venv\Scripts\whatweb.exe\__main__.py", line 7, in <module>
+  File "c:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\.venv\Lib\site-packages\whatweb.py", line 163, in main
+    print(whatweb(args.target))
+          ^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\omarz\GRAD-PROJECT-2024-25\GRAD-PROJECT-2024-25\.venv\Lib\site-packages\whatweb.py", line 88, in whatweb
+    title = soup.title.get_text()
+            ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get_text'
+
+Directory Indexing: Directory indexing is disabled.
+File Upload Vulnerability: Error: curl: (26) Failed to open/read local data from file/application
+
+Backup Files: No backup files found.
+CORS Misconfiguration: No CORS misconfiguration detected.

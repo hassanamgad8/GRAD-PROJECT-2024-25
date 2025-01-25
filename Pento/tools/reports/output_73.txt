@@ -1,0 +1,6 @@
+# Nmap 7.95 scan initiated Mon Jan  6 08:53:54 2025 as: nmap -oN C:\\Users\\omarzRead data files from: C:\Program Files (x86)\Nmap
+Nmap done: 0 IP addresses (0 hosts up) scanned in 0.64 seconds
+           Raw packets sent: 0 (0B) | Rcvd: 0 (0B)
+les from: C:\Program Files (x86)\Nmap
+WARNING: No targets were specified, so 0 hosts scanned.
+# Nmap done at Mon Jan  6 08:53:55 2025 -- 0 IP addresses (0 hosts up) scanned in 0.64 seconds

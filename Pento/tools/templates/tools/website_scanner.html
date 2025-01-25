@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Unified Vulnerability Scanner</title>
     {% load static %}
@@ -26,7 +27,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #0be021;
             padding: 8px;
             text-align: left;
@@ -37,6 +39,7 @@
         }
     </style>
 </head>
+
 <body class="website-scanner-page">
 
     <h1>Website Vulnerability Scanner</h1>
@@ -104,6 +107,10 @@
             <label>
                 <input type="radio" name="scan_mode" value="xss"> XSS-Only
             </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_all"> Check All (Run all scans)
+            </label>
         </div>
 
         <!-- Advanced Options -->
@@ -159,6 +166,38 @@
             </div>
         </div>
 
+        <!-- Additional Features -->
+        <div class="section">
+            <h3>Additional Features</h3>
+            <label>
+                <input type="checkbox" name="check_ssl"> SSL/TLS Certificate Validation
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_headers"> HTTP Security Header Validation
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_cms"> CMS Identification
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_indexing"> Directory Indexing
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_upload_vuln"> File Upload Vulnerability Check
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_backup_files"> Backup Files Discovery
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="check_cors"> CORS Misconfiguration
+            </label>
+        </div>
+
         <!-- Reporting -->
         <div class="section">
             <h3>Reporting</h3>
@@ -212,34 +251,39 @@
                     <td>Use for focused scanning.</td>
                 </tr>
                 <tr>
-                    <td>WAF Bypass</td>
-                    <td>Attempts to bypass Web Application Firewalls.</td>
-                    <td>Use when scans are blocked by firewalls.</td>
+                    <td>SSL/TLS Certificate Validation</td>
+                    <td>Checks the validity and expiration of SSL/TLS certificates.</td>
+                    <td>Use to verify secure connections.</td>
                 </tr>
                 <tr>
-                    <td>Injection Techniques</td>
-                    <td>Specifies SQL Injection techniques (Boolean, Error, Time-Based, Union).</td>
-                    <td>Choose based on the target database or vulnerability type.</td>
+                    <td>HTTP Security Header Validation</td>
+                    <td>Checks if proper security headers are configured.</td>
+                    <td>Use to enhance HTTP security.</td>
                 </tr>
                 <tr>
-                    <td>Reflected XSS</td>
-                    <td>Tests for reflected XSS vulnerabilities.</td>
-                    <td>Use when inputs are immediately reflected in responses.</td>
+                    <td>CMS Identification</td>
+                    <td>Detects the CMS (e.g., WordPress, Joomla) used by the target website.</td>
+                    <td>Use to identify potential CMS-related vulnerabilities.</td>
                 </tr>
                 <tr>
-                    <td>Stored XSS</td>
-                    <td>Tests for stored XSS vulnerabilities.</td>
-                    <td>Use when inputs are stored server-side (e.g., databases).</td>
+                    <td>Directory Indexing</td>
+                    <td>Detects if directory indexing is enabled.</td>
+                    <td>Use to find unintended file disclosures.</td>
                 </tr>
                 <tr>
-                    <td>DOM-Based XSS</td>
-                    <td>Tests for client-side XSS vulnerabilities.</td>
-                    <td>Use when dynamic JavaScript manipulates the DOM.</td>
+                    <td>File Upload Vulnerability Check</td>
+                    <td>Checks for insecure file upload functionality.</td>
+                    <td>Use to identify file upload risks.</td>
                 </tr>
                 <tr>
-                    <td>Payload Encoding</td>
-                    <td>Encodes payloads (e.g., Base64, URL encoding).</td>
-                    <td>Use to bypass basic input filters.</td>
+                    <td>Backup Files Discovery</td>
+                    <td>Searches for backup files left accessible on the server.</td>
+                    <td>Use to find exposed sensitive files.</td>
+                </tr>
+                <tr>
+                    <td>CORS Misconfiguration</td>
+                    <td>Checks for improper CORS configurations.</td>
+                    <td>Use to ensure secure cross-origin communication.</td>
                 </tr>
                 <tr>
                     <td>Real-Time Logs</td>
@@ -254,5 +298,8 @@
             </tbody>
         </table>
     </div>
+
+    <script src="{% static 'js/website_scanner.js' %}"></script>
 </body>
+
 </html>

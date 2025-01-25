@@ -118,6 +118,8 @@
 
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/port_scanner.js' %}"></script>
+    <script src="{% static 'js/google.js' %}"></script>
+
 
     <script>
         const csrftoken = '{{ csrf_token }}';
@@ -131,6 +133,7 @@
             websiteScannerIcon: "{% static 'images/website-scanner-icon.png' %}",
             whoisLookupIcon: "{% static 'images/whois-lookup-icon.png' %}",
             dnsLookupIcon: "{% static 'images/dns-lookup-icon.png' %}",
+            googleHackingIcon:  "{% static 'images/g.png' %}",
         };
     </script>
     

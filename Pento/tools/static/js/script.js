@@ -395,6 +395,11 @@ findingsBtn.addEventListener("click", function () {
                     <h3>Dns Lookup</h3>
                     <p>Find the IP of a domain name .</p>
                 </div>
+                <div class="tool-card" data-tool="google_hacking">
+                    <img src="${staticPaths.googleHackingIcon}" alt="Google Hacking Icon" class="tool-icon">
+                    <h3>Google Hacking</h3>
+                    <p>Find juicy information using Google Dorking.</p>
+                </div>
             </div>
         `;
         // Attach event listeners to the tool cards
@@ -517,6 +522,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Example usage: Call these functions when needed
-    document.getElementById("run-scan-btn").addEventListener("click", loadProgressPage);
+    
 });
+
+
+
